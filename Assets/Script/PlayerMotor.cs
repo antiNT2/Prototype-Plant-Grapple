@@ -72,8 +72,16 @@ public class PlayerMotor : MonoBehaviour
         if (totalMovement != 0)
         {
             if (!ShouldUseForceMovement())
-                Move(totalMovement);
+            {
+                if (isFalling && RopeManager.instance.currentState == RopeManager.RopeState.Retracting && !AxisIsOppositeToVelocity(totalMovement) && Mathf.Abs(playerRigidbody.velocity.x) > 0.5f)
+                    print("Do Nothing (velocity.x is " + playerRigidbody.velocity.x);
+                else
+                    Move(totalMovement);
+            }
         }
+
+        if (ShouldUseForceMovement())
+            playerRigidbody.gravityScale = initialGravity;
 
         SetAnimations();
     }
@@ -161,7 +169,7 @@ public class PlayerMotor : MonoBehaviour
 
         //If the jumpButton is released but the character's y-velocity is still
         //positive...
-        if (playerRigidbody.velocity.y > 0)
+        if (playerRigidbody.velocity.y > 0 && !ShouldUseForceMovement())
         {
             //...set the character's y-velocity to 0;
             //playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0);
@@ -177,7 +185,7 @@ public class PlayerMotor : MonoBehaviour
 
     IEnumerator VerticalVelocityDecreaseRoutine()
     {
-        while (playerRigidbody.velocity.y > 0)
+        while (playerRigidbody.velocity.y > 0 && !ShouldUseForceMovement())
         {
             playerRigidbody.velocity = Vector2.Lerp(playerRigidbody.velocity, new Vector2(playerRigidbody.velocity.x, 0f), Time.fixedDeltaTime * 6f);
             //print(playerRigidbody.velocity.y);
@@ -202,15 +210,24 @@ public class PlayerMotor : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        
+
         inputAxis = 0;
     }
     void Move(float axis)
     {
         playerRigidbody.velocity = new Vector2(0f, playerRigidbody.velocity.y);
+
         Vector2 movement = Vector2.right * speed * axis * Time.deltaTime;
         if ((axis > 0 && !wallRight) || (axis < 0 && !wallLeft))
             this.transform.Translate(movement);
+    }
+
+    bool AxisIsOppositeToVelocity(float axis)
+    {
+        if (playerRigidbody.velocity.x > 0 && axis < 0 || playerRigidbody.velocity.x < 0 && axis > 0)
+            return true;
+        else
+            return false;
     }
 
     void GrappleMove(float axis)

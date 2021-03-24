@@ -228,7 +228,7 @@ public class RopeManager : MonoBehaviour
             else
             {
                 currentState = RopeState.Retracting;
-                Debug.Log("RETRACTING WITH LOW ANGLE");
+               // Debug.Log("RETRACTING WITH LOW ANGLE");
             }
         }
         else
@@ -241,9 +241,12 @@ public class RopeManager : MonoBehaviour
             else
             {
                 currentState = RopeState.Retracting;
-                Debug.Log("RETRACTING WITH high ANGLE, current angle was " + GetGrappleAngle());
+                //Debug.Log("RETRACTING WITH high ANGLE, current angle was " + GetGrappleAngle());
             }
         }
+
+        if (playerRigidbody.velocity.magnitude <= 0.1f)
+            currentState = RopeState.Retracting;
 
         /* if (distanceBetweenPlayerAndEndPos.magnitude > maxRopeLength)
              ApplyPropulsion();
