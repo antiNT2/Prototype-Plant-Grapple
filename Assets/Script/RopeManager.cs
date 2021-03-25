@@ -23,6 +23,9 @@ public class RopeManager : MonoBehaviour
     [SerializeField]
     Transform restingPos;
 
+    [SerializeField]
+    Transform armEndObject;
+
     float initialGrappleAngle;
 
     [SerializeField]
@@ -60,7 +63,7 @@ public class RopeManager : MonoBehaviour
         initialRopeSegLength = bridgeScript.ropeSegLen;
         playerInput = FindObjectOfType<PlayerInput>();
         playerRigidbody = playerInput.GetComponent<Rigidbody2D>();
-        initialHandLocalPosition = AlignHandWithRope.instance.transform.GetChild(0).localPosition;
+        //initialHandLocalPosition = AlignHandWithRope.instance.transform.GetChild(0).localPosition;
         endPointJoint = endPos.GetComponent<DistanceJoint2D>();
     }
 
@@ -75,9 +78,10 @@ public class RopeManager : MonoBehaviour
             //bridgeScript.enabled = true;
             //grappleScript.enabled = false;
             armRenderer.enabled = true;
-            if (Vector2.Distance(AlignHandWithRope.instance.transform.position, restingPos.position) > 0.1f)
+            if (Vector2.Distance(endPos.position, restingPos.position) > 0.1f)
             {
-                AlignHandWithRope.instance.transform.position = Vector3.Lerp(AlignHandWithRope.instance.transform.position, restingPos.position, (Time.deltaTime * 10f) / (AlignHandWithRope.instance.transform.position - restingPos.position).magnitude);
+                endPos.position = Vector3.Lerp(endPos.position, restingPos.position, (Time.deltaTime * 10f) / (endPos.position - restingPos.position).magnitude);
+                armEndObject.position = endPos.position;
                // bridgeScript.ropeSegLen = Mathf.Lerp(bridgeScript.ropeSegLen, 0.01f, Time.deltaTime * 2f);
             }
             else
@@ -93,14 +97,16 @@ public class RopeManager : MonoBehaviour
         {
             armRenderer.enabled = true;
             grappleScript.enabled = true;
-            AlignHandWithRope.instance.transform.GetChild(0).position = armRenderer.GetPosition(armRenderer.positionCount - 1);
+            armEndObject.transform.parent = null;
+            armEndObject.position = armRenderer.GetPosition(armRenderer.positionCount - 1);
 
-            if (AlignHandWithRope.instance.transform.GetChild(0).localPosition == Vector3.zero)
+            if (armEndObject.position == endPos.position)
             {
+                print("Arrived, " + armEndObject.position + " / " + endPos.position);
                 currentState = RopeState.LockedOn;
                 //PropulseToEndLocation();
                 playerRigidbody.AddForce((endPos.transform.position - playerRigidbody.transform.position).normalized * initialPropulsionImpulse, ForceMode2D.Impulse);
-                AlignHandWithRope.instance.transform.GetChild(0).localPosition = initialHandLocalPosition;
+                //AlignHandWithRope.instance.transform.GetChild(0).localPosition = initialHandLocalPosition;
             }
         }
 
@@ -194,6 +200,12 @@ public class RopeManager : MonoBehaviour
         grappleScript.enabled = false;
         armRenderer.enabled = false;
         AlignHandWithRope.instance.transform.position = restingPos.position;
+        if (armEndObject.parent == null)
+        {
+            armEndObject.parent = restingPos;
+            armEndObject.transform.position = restingPos.position;
+            armEndObject.localRotation = Quaternion.identity;
+        }
 
         if (AlignHandWithRope.instance.enabled)
             AlignHandWithRope.instance.enabled = false;

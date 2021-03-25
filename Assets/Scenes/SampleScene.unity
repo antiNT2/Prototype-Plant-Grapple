@@ -189,11 +189,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21144138}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.035999954, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1685018863}
+  m_Father: {fileID: 728112436}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &21144140
@@ -274,7 +274,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 728112436}
   m_Father: {fileID: 1847731193}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -556,6 +557,7 @@ MonoBehaviour:
   startPos: {fileID: 1792346081}
   endPos: {fileID: 1685018863}
   restingPos: {fileID: 728112436}
+  armEndObject: {fileID: 21144139}
   currentState: 0
   wallCheckDistance: 1000
   grappleLayer:
@@ -581,7 +583,7 @@ MonoBehaviour:
   startPoint: {fileID: 1792346081}
   endPoint: {fileID: 1685018863}
   m_lineRenderer: {fileID: 241914909}
-  percision: 40
+  percision: 100
   straightenLineSpeed: 7.4
   ropeAnimationCurve:
     serializedVersion: 2
@@ -589,53 +591,44 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.33732992
-      outSlope: 0.33732992
+      inSlope: 0.44693062
+      outSlope: 0.44693062
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.19835883
-      value: 0.06691237
-      inSlope: -0.18877265
-      outSlope: -0.18877265
+      time: 0.14862281
+      value: 0.06642409
+      inSlope: -0.0029412657
+      outSlope: -0.0029412657
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.41654268
-      value: -0.089061856
-      inSlope: 0.48602486
-      outSlope: 0.48602486
+      time: 0.40869966
+      value: -0.05134213
+      inSlope: 0.02358903
+      outSlope: 0.02358903
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5183197
-      value: 0.082628384
-      inSlope: 0.77816206
-      outSlope: 0.77816206
+      time: 0.6492096
+      value: 0.06891073
+      inSlope: 0.012897596
+      outSlope: 0.012897596
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.74837255
-      value: 0.0525833
-      inSlope: -0.75440115
-      outSlope: -0.75440115
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.8425865
-      value: -0.07726252
-      inSlope: -0.4436881
-      outSlope: -0.4436881
+      time: 0.8975487
+      value: -0.048850656
+      inSlope: 0.0013110936
+      outSlope: 0.0013110936
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -643,8 +636,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: 0.4908253
-      outSlope: 0.4908253
+      inSlope: 0.4768182
+      outSlope: 0.4768182
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -652,7 +645,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  StartWaveSize: 1.82
+  StartWaveSize: 4
   ropeProgressionCurve:
     serializedVersion: 2
     m_Curve:
@@ -692,6 +685,8 @@ GameObject:
   - component: {fileID: 534669904}
   - component: {fileID: 534669903}
   - component: {fileID: 534669906}
+  - component: {fileID: 534669908}
+  - component: {fileID: 534669907}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -798,6 +793,57 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &534669907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534669902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AssetsPPU: 32
+  m_RefResolutionX: 320
+  m_RefResolutionY: 180
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
+--- !u!114 &534669908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534669902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &655564939
 GameObject:
   m_ObjectHideFlags: 3
@@ -1131,12 +1177,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 728112435}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.202, y: -0.077, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.20200002, y: -0.07699999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1847731193}
-  m_RootOrder: 2
+  m_Children:
+  - {fileID: 21144139}
+  m_Father: {fileID: 213810915}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984410965
 GameObject:
@@ -1607,8 +1654,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0.036382068, z: 0, w: 0.99933803}
   m_LocalPosition: {x: 1.72, y: 0.97, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 21144139}
+  m_Children: []
   m_Father: {fileID: 241914910}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 4.17, z: 0}
@@ -1776,7 +1822,6 @@ Transform:
   m_Children:
   - {fileID: 1792346081}
   - {fileID: 213810915}
-  - {fileID: 728112436}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
