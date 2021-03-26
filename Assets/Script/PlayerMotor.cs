@@ -73,9 +73,8 @@ public class PlayerMotor : MonoBehaviour
         {
             if (!ShouldUseForceMovement())
             {
-                if (isFalling && RopeManager.instance.currentState == RopeManager.RopeState.Retracting && !AxisIsOppositeToVelocity(totalMovement) && Mathf.Abs(playerRigidbody.velocity.x) > 0.5f)
-                    print("Do Nothing (velocity.x is " + playerRigidbody.velocity.x);
-                else
+                if (!(isFalling && RopeManager.instance.currentState == RopeManager.RopeState.Retracting && !AxisIsOppositeToVelocity(totalMovement) && Mathf.Abs(playerRigidbody.velocity.x) > 0.5f))
+                    // print("Do Nothing (velocity.x is " + playerRigidbody.velocity.x);
                     Move(totalMovement);
             }
         }
@@ -233,7 +232,7 @@ public class PlayerMotor : MonoBehaviour
     void GrappleMove(float axis)
     {
         playerRigidbody.AddForce(Vector2.right * axis * moveForceGrapple);
-        Debug.Log("GrappleMOve");
+        //Debug.Log("GrappleMOve");
     }
 
     #region Obstacle Detection
