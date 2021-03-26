@@ -17,6 +17,9 @@ public class RopeManager : MonoBehaviour
     DistanceJoint2D endPointJoint;
 
     [SerializeField]
+    Joint2D pullSpringJoint;
+
+    [SerializeField]
     Transform startPos;
     [SerializeField]
     Transform endPos;
@@ -34,6 +37,8 @@ public class RopeManager : MonoBehaviour
     public float wallCheckDistance;
     [SerializeField]
     LayerMask grappleLayer;
+    [SerializeField]
+    LayerMask pullLayer;
     Rigidbody2D playerRigidbody;
     public float initialPropulsionImpulse;
     public float delayBetweenGrabs = 0.1f;
@@ -42,6 +47,7 @@ public class RopeManager : MonoBehaviour
     float lastVelocity = 0f;
     float lastGrabTime;
     Transform lastGrapplePoint;
+    Transform pullingObject;
 
     public float maxRopeLength;
     public float propulsionSpeed;
@@ -53,7 +59,8 @@ public class RopeManager : MonoBehaviour
         Retracting,
         Traveling,
         LockedOn,
-        Failed
+        Failed,
+        Pulling
     }
 
     /* Vector2 initialHandLocalPosition;
@@ -71,6 +78,7 @@ public class RopeManager : MonoBehaviour
         playerRigidbody = playerInput.GetComponent<Rigidbody2D>();
         //initialHandLocalPosition = AlignHandWithRope.instance.transform.GetChild(0).localPosition;
         endPointJoint = endPos.GetComponent<DistanceJoint2D>();
+        //pullSpringJoint = endPos.GetComponent<SpringJoint2D>();
     }
 
     private void Update()
@@ -79,17 +87,14 @@ public class RopeManager : MonoBehaviour
         {
             ApplyRestPosEffects();
         }
-        else if (currentState == RopeState.Retracting)
+        else if (currentState == RopeState.Retracting || currentState == RopeState.Pulling)
         {
-            //bridgeScript.enabled = true;
-            //grappleScript.enabled = false;
+
             armRenderer.enabled = true;
             if (Vector2.Distance(endPos.position, restingPos.position) > 0.1f)
             {
-                endPos.position = Vector3.MoveTowards(endPos.position, restingPos.position, Time.deltaTime * 10f);
-                // endPos.position = Vector3.Lerp(endPos.position, restingPos.position, (Time.deltaTime * 10f) / (endPos.position - restingPos.position).magnitude);
+                endPos.position = Vector3.MoveTowards(endPos.position, restingPos.position, Time.deltaTime * 20f);
                 armEndObject.position = endPos.position;
-                // bridgeScript.ropeSegLen = Mathf.Lerp(bridgeScript.ropeSegLen, 0.01f, Time.deltaTime * 2f);
             }
             else
                 currentState = RopeState.Rest;
@@ -97,8 +102,6 @@ public class RopeManager : MonoBehaviour
             if (!AlignHandWithRope.instance.enabled)
                 AlignHandWithRope.instance.enabled = true;
 
-            //bridgeScript.StartPoint = restingPos;
-            // AlignHandWithRope.instance.SetHandSpritePosition(true);
         }
         else if (currentState == RopeState.Traveling || currentState == RopeState.Failed)
         {
@@ -109,19 +112,12 @@ public class RopeManager : MonoBehaviour
 
             if (armEndObject.position == endPos.position)
             {
-                if (currentState == RopeState.Traveling)
-                {
-                    print("Arrived, " + armEndObject.position + " / " + endPos.position);
-                    currentState = RopeState.LockedOn;
-                    playerRigidbody.AddForce((endPos.transform.position - playerRigidbody.transform.position).normalized * initialPropulsionImpulse, ForceMode2D.Impulse);
-                }
-                else if (currentState == RopeState.Failed)
-                    currentState = RopeState.Retracting;
+                OnGrappleLock();
             }
         }
 
 
-        if (currentState == RopeState.Rest || currentState == RopeState.Retracting)
+        if (currentState == RopeState.Rest || currentState == RopeState.Retracting || currentState == RopeState.Pulling)
         {
 
             if (playerInput.actions.FindAction("Grapple").triggered && Time.time > lastGrabTime + delayBetweenGrabs)
@@ -142,7 +138,6 @@ public class RopeManager : MonoBehaviour
             }
         }
 
-
         actualAngleTest = GetGrappleAngle();
     }
 
@@ -159,6 +154,33 @@ public class RopeManager : MonoBehaviour
     private void LateUpdate()
     {
         lastVelocity = playerRigidbody.velocity.magnitude;
+    }
+
+    void OnGrappleLock()
+    {
+        if (currentState == RopeState.Traveling)
+        {
+            //print("Arrived, " + armEndObject.position + " / " + endPos.position);
+            print("Last Grapple point " + lastGrapplePoint);
+
+            if (playerInput.actions.FindAction("Grapple").phase == InputActionPhase.Started && pullingObject != null && pullLayer == (pullLayer | (1 << pullingObject.gameObject.layer))) //if we are holding button and object is pullable
+            {
+                lastGrapplePoint = null;
+                pullSpringJoint.connectedBody = pullingObject.gameObject.GetComponent<Rigidbody2D>();
+                pullSpringJoint.enabled = true;
+                currentState = RopeState.Pulling;
+            }
+            else
+            {
+                currentState = RopeState.LockedOn;
+                playerRigidbody.AddForce((endPos.transform.position - playerRigidbody.transform.position).normalized * initialPropulsionImpulse, ForceMode2D.Impulse);
+            }
+
+            CustomFunctions.CameraShake();
+            CustomFunctions.HitFreeze(0.05f);
+        }
+        else if (currentState == RopeState.Failed)
+            currentState = RopeState.Retracting;
     }
 
     bool HasCollidedWhileFlying()
@@ -188,6 +210,8 @@ public class RopeManager : MonoBehaviour
         grappleScript.enabled = false;
         armRenderer.enabled = false;
         AlignHandWithRope.instance.transform.position = restingPos.position;
+        pullSpringJoint.enabled = false;
+
         if (armEndObject.parent == null)
         {
             armEndObject.parent = restingPos;
@@ -340,6 +364,8 @@ public class RopeManager : MonoBehaviour
     IEnumerator SetLastGrapplePoint(Transform grapplePoint)
     {
         lastGrapplePoint = grapplePoint;
+        if (lastGrapplePoint != null)
+            pullingObject = lastGrapplePoint;
         yield return new WaitForSeconds(1f);
         lastGrapplePoint = null;
     }
