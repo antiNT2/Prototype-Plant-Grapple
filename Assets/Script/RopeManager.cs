@@ -13,6 +13,8 @@ public class RopeManager : MonoBehaviour
     GrappleRope grappleScript;
     [SerializeField]
     LineRenderer armRenderer;
+    [SerializeField]
+    GameObject grappleIndicator;
     PlayerInput playerInput;
     DistanceJoint2D endPointJoint;
 
@@ -113,7 +115,6 @@ public class RopeManager : MonoBehaviour
 
         if (currentState == RopeState.Rest || currentState == RopeState.Retracting || currentState == RopeState.Pulling)
         {
-
             if (playerInput.actions.FindAction("Grapple").triggered && Time.time > lastGrabTime + delayBetweenGrabs)
             {
                 ApplyRestPosEffects();
@@ -132,6 +133,8 @@ public class RopeManager : MonoBehaviour
             }
         }
 
+        ShowGrapplePoint();
+
         actualAngleTest = GetGrappleAngle();
     }
 
@@ -148,6 +151,21 @@ public class RopeManager : MonoBehaviour
     private void LateUpdate()
     {
         lastVelocity = playerRigidbody.velocity.magnitude;
+    }
+
+    void ShowGrapplePoint()
+    {
+        (Vector2, Transform) detectedGrapplePoint = DetectWallToGrapple(GetGrappleDirection());
+
+        if (detectedGrapplePoint.Item2 != null)
+        {
+            grappleIndicator.gameObject.SetActive(true);
+            grappleIndicator.transform.position = detectedGrapplePoint.Item1;
+        }
+        else
+        {
+            grappleIndicator.gameObject.SetActive(false);
+        }
     }
 
     void OnGrappleLock()
@@ -288,12 +306,13 @@ public class RopeManager : MonoBehaviour
 
     void GrappleToTarget(Vector2 direction)
     {
-        Vector2 touchedWall = DetectWallToGrapple(direction);
+        (Vector2, Transform) touchedWall = DetectWallToGrapple(direction);
 
-        if (touchedWall != Vector2.zero)
+        if (touchedWall.Item2 != null)
         {
-            endPos.position = touchedWall;
-            PlayerMotor.instance.SetCorrectRenderOrientation((touchedWall - (Vector2)playerRigidbody.transform.position).x > 0 ? false : true);
+            StartCoroutine(SetLastGrapplePoint(touchedWall.Item2));
+            endPos.position = touchedWall.Item1;
+            PlayerMotor.instance.SetCorrectRenderOrientation((touchedWall.Item1 - (Vector2)playerRigidbody.transform.position).x > 0 ? false : true);
             endPointJoint.enabled = true;
             currentState = RopeState.Traveling;
         }
@@ -305,7 +324,7 @@ public class RopeManager : MonoBehaviour
         }
 
         initialGrappleAngle = GetGrappleAngle();
-        endPointJoint.distance = Vector2.Distance(playerRigidbody.transform.position, touchedWall);
+        endPointJoint.distance = Vector2.Distance(playerRigidbody.transform.position, touchedWall.Item1);
         lastGrabTime = Time.time;
     }
 
@@ -327,8 +346,7 @@ public class RopeManager : MonoBehaviour
             currentState = RopeState.Traveling;
         }
     }*/
-
-    Vector2 DetectWallToGrapple(Vector2 direction)
+    (Vector2, Transform) DetectWallToGrapple(Vector2 direction)
     {
         Vector2 rayOrigin = playerInput.transform.position;
         RaycastHit2D[] hit = Physics2D.RaycastAll(rayOrigin, direction, wallCheckDistance, grappleLayer);
@@ -341,21 +359,20 @@ public class RopeManager : MonoBehaviour
                 if (hit[i].transform.gameObject.layer == 9)
                 {
                     if (hit[i].collider.isTrigger == false)
-                        return hit[i].point;
+                        return (hit[i].point, hit[i].transform);
                 }
                 else
                 {
                     if (lastGrapplePoint == null || hit[i].transform != lastGrapplePoint)
                     {
-                        StartCoroutine(SetLastGrapplePoint(hit[i].transform));
-                        return hit[i].transform.position;
+                        return (hit[i].transform.position, hit[i].transform);
                     }
                 }
             }
         }
 
         Debug.Log("Nothing found to grapple on");
-        return Vector2.zero;
+        return (Vector2.zero, null);
     }
 
     IEnumerator SetLastGrapplePoint(Transform grapplePoint)
