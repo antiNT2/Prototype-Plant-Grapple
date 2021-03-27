@@ -17,7 +17,7 @@ public class PlayerMotor : MonoBehaviour
     PlayerInput playerInput;
     float inputAxis;
     float knockbackAxis;
-    float totalMovement;
+    public float totalMovement { get; private set; }
     Animator playerAnimator;
     Rigidbody2D playerRigidbody;
     bool jumpButtonPressed;
@@ -73,8 +73,7 @@ public class PlayerMotor : MonoBehaviour
         {
             if (!ShouldUseForceMovement())
             {
-                if (!(isFalling && RopeManager.instance.currentState == RopeManager.RopeState.Retracting && !AxisIsOppositeToVelocity(totalMovement) && Mathf.Abs(playerRigidbody.velocity.x) > 0.5f))
-                    // print("Do Nothing (velocity.x is " + playerRigidbody.velocity.x);
+                if (IsTryingToMoveInSameDirectionAsGrapplePropulsion() == false)            
                     Move(totalMovement);
             }
         }
@@ -90,16 +89,23 @@ public class PlayerMotor : MonoBehaviour
         if (totalMovement != 0)
         {
             if (ShouldUseForceMovement())
+            {
                 GrappleMove(totalMovement);
+            }
         }
     }
 
     bool ShouldUseForceMovement()
     {
-        if (isFalling && (RopeManager.instance.currentState == RopeManager.RopeState.LockedOn /*|| RopeManager.instance.currentState == RopeManager.RopeState.Retracting*/))
+        if (isFalling && (RopeManager.instance.currentState == RopeManager.RopeState.LockedOn))
             return true;
 
         return false;
+    }
+
+    bool IsTryingToMoveInSameDirectionAsGrapplePropulsion()
+    {
+        return (isFalling && RopeManager.instance.currentState == RopeManager.RopeState.Retracting && !AxisIsOppositeToVelocity(totalMovement) && Mathf.Abs(playerRigidbody.velocity.x) > 0.5f);
     }
 
     public void SetCorrectRenderOrientation(bool lookLeft)

@@ -63,9 +63,6 @@ public class RopeManager : MonoBehaviour
         Pulling
     }
 
-    /* Vector2 initialHandLocalPosition;
-     public float initialRopeSegLength;*/
-
     private void Awake()
     {
         instance = this;
@@ -73,12 +70,9 @@ public class RopeManager : MonoBehaviour
 
     private void Start()
     {
-        //initialRopeSegLength = bridgeScript.ropeSegLen;
         playerInput = FindObjectOfType<PlayerInput>();
         playerRigidbody = playerInput.GetComponent<Rigidbody2D>();
-        //initialHandLocalPosition = AlignHandWithRope.instance.transform.GetChild(0).localPosition;
         endPointJoint = endPos.GetComponent<DistanceJoint2D>();
-        //pullSpringJoint = endPos.GetComponent<SpringJoint2D>();
     }
 
     private void Update()
@@ -270,6 +264,9 @@ public class RopeManager : MonoBehaviour
         }
 
         if (playerRigidbody.velocity.magnitude <= 0.1f)
+            currentState = RopeState.Retracting;
+
+        if (Mathf.Abs(PlayerMotor.instance.totalMovement) >= 1f && Mathf.Sign(forceToAdd.x) != Mathf.Sign(PlayerMotor.instance.totalMovement) && Mathf.Abs(GetGrappleAngle()) >= 90f)
             currentState = RopeState.Retracting;
 
         /* if (distanceBetweenPlayerAndEndPos.magnitude > maxRopeLength)
