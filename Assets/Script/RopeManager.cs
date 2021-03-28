@@ -15,6 +15,8 @@ public class RopeManager : MonoBehaviour
     LineRenderer armRenderer;
     [SerializeField]
     GameObject grappleIndicator;
+    [SerializeField]
+    GameObject grappleDirectionIndicator;
     PlayerInput playerInput;
     DistanceJoint2D endPointJoint;
 
@@ -48,11 +50,13 @@ public class RopeManager : MonoBehaviour
 
     float lastVelocity = 0f;
     float lastGrabTime;
+    Vector2 lastJoystickPos;
     Transform lastGrapplePoint;
     Transform pullingObject;
 
     public float maxRopeLength;
     public float propulsionSpeed;
+    public float grappleDirectionIndicatorRadius = 1f;
 
     public float actualAngleTest;
     public enum RopeState
@@ -135,6 +139,8 @@ public class RopeManager : MonoBehaviour
 
         ShowGrapplePoint();
 
+        ShowGrappleDirectionIndicator();
+
         actualAngleTest = GetGrappleAngle();
     }
 
@@ -166,6 +172,12 @@ public class RopeManager : MonoBehaviour
         {
             grappleIndicator.gameObject.SetActive(false);
         }
+    }
+
+    void ShowGrappleDirectionIndicator()
+    {
+        float angle = Mathf.Atan2(GetGrappleDirection().y, GetGrappleDirection().x);
+        grappleDirectionIndicator.transform.localPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * grappleDirectionIndicatorRadius;
     }
 
     void OnGrappleLock()
@@ -237,18 +249,15 @@ public class RopeManager : MonoBehaviour
 
     Vector2 GetGrappleDirection()
     {
-        /*Vector2 output = playerInput.actions.FindAction("Move").ReadValue<Vector2>();
-        if (output == Vector2.zero)
+        //playerInput.actions.FindAction("Move").ReadValue<Vector2>()
+        if (playerInput.currentControlScheme == "Gamepad")
         {
-            if (PlayerMotor.instance.isLookingRight)
-                output = Vector2.right;
-            else
-                output = Vector2.left;
+            if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
+                lastJoystickPos = playerInput.actions.FindAction("Move").ReadValue<Vector2>().normalized;
+            return lastJoystickPos;
         }
-
-        return output;*/
-
-        return (Camera.main.ScreenToWorldPoint(Input.mousePosition) - playerRigidbody.transform.position).normalized;
+        else
+            return (Camera.main.ScreenToWorldPoint(Input.mousePosition) - playerRigidbody.transform.position).normalized;
     }
 
     void PropulseToEndLocation()
@@ -334,18 +343,6 @@ public class RopeManager : MonoBehaviour
         return (Mathf.Atan2(travelVector.x, travelVector.y) * Mathf.Rad2Deg);
     }
 
-    /*void GrappleToTarget()
-    {
-        Vector2 touchedWall = DetectWallToGrapple();
-        //print(direction);
-
-
-        if (touchedWall != Vector2.zero)
-        {
-            endPos.position = touchedWall;
-            currentState = RopeState.Traveling;
-        }
-    }*/
     (Vector2, Transform) DetectWallToGrapple(Vector2 direction)
     {
         Vector2 rayOrigin = playerInput.transform.position;

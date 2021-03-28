@@ -16,6 +16,7 @@ public class PlayerMotor : MonoBehaviour
 
     PlayerInput playerInput;
     float inputAxis;
+    bool startedAcceleratingInput;
     float knockbackAxis;
     public float totalMovement { get; private set; }
     Animator playerAnimator;
@@ -66,10 +67,11 @@ public class PlayerMotor : MonoBehaviour
         CheckWalls();
         jumpButtonPressed = playerInput.actions.FindAction("Jump").phase == InputActionPhase.Started;
 
-        if (playerInput.actions.FindAction("Move").triggered && playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
+        if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
         {
             SetCorrectRenderOrientation(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x < 0f);
-            StartCoroutine(AccelerateInput());
+            if (startedAcceleratingInput == false)
+                StartCoroutine(AccelerateInput());
         }
 
         if (playerInput.actions.FindAction("Jump").triggered && (isGrounded || coyoteTime == CoyoteTimeStatuts.StartedCounting))
@@ -218,20 +220,28 @@ public class PlayerMotor : MonoBehaviour
 
     IEnumerator AccelerateInput()
     {
-        float outputX = 0.3f * Mathf.RoundToInt(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x);
+        startedAcceleratingInput = true;
+        float outputX = 0.3f * Mathf.Sign(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x);
+        float timer = 0;
 
         while (playerInput.actions.FindAction("Move").ReadValue<Vector2>().x != 0)
         {
+            float sign = (Mathf.Sign(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x));
             //print(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x);
 
-            outputX += Time.deltaTime * Mathf.Exp(acceleration) * Mathf.RoundToInt(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x);
-            outputX = Mathf.Clamp(outputX, -1f, 1f);
+            // outputX += outputAcceleration * sign;
+            outputX = Mathf.Lerp(0.3f * sign, 1f * sign, timer);
+            timer += acceleration * Time.deltaTime;
+            //outputAcceleration += Time.deltaTime;
+            //outputX *= (Mathf.Sign(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x));
+            //outputX = Mathf.Clamp(outputX, -1f, 1f);
             inputAxis = outputX;
             yield return new WaitForEndOfFrame();
         }
 
 
         inputAxis = 0;
+        startedAcceleratingInput = false;
     }
     void Move(float axis)
     {
