@@ -371,7 +371,7 @@ public class RopeManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Nothing found to grapple on");
+        //Debug.Log("Nothing found to grapple on");
         return (Vector2.zero, null);
     }
 

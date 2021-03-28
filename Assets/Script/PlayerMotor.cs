@@ -22,6 +22,14 @@ public class PlayerMotor : MonoBehaviour
     Rigidbody2D playerRigidbody;
     bool jumpButtonPressed;
     float initialGravity;
+    CoyoteTimeStatuts coyoteTime;
+    enum CoyoteTimeStatuts
+    {
+        Grounded,
+        Jumped,
+        StartedCounting,
+        FinishedCounting
+    }
     public bool isLookingRight { get; private set; } = true;
 
     //Ground Detection Variables :
@@ -31,6 +39,7 @@ public class PlayerMotor : MonoBehaviour
     public bool isGrounded;
     public bool isFalling;
     public LayerMask groundLayer;
+    public float coyoteTimeDuration = 0.1f;
 
     //Wall Detection Variables :
     public float wallCheckDistance = 0.12f;
@@ -63,8 +72,14 @@ public class PlayerMotor : MonoBehaviour
             StartCoroutine(AccelerateInput());
         }
 
-        if (playerInput.actions.FindAction("Jump").triggered && isGrounded)
+        if (playerInput.actions.FindAction("Jump").triggered && (isGrounded || coyoteTime == CoyoteTimeStatuts.StartedCounting))
+        {
+            coyoteTime = CoyoteTimeStatuts.Jumped;
             StartCoroutine(JumpRoutine());
+        }
+
+        if (jumpButtonPressed && coyoteTime != CoyoteTimeStatuts.Jumped)
+            coyoteTime = CoyoteTimeStatuts.Jumped;
 
         totalMovement = inputAxis;
         totalMovement += knockbackAxis;
@@ -73,7 +88,7 @@ public class PlayerMotor : MonoBehaviour
         {
             if (!ShouldUseForceMovement())
             {
-                if (IsTryingToMoveInSameDirectionAsGrapplePropulsion() == false)            
+                if (IsTryingToMoveInSameDirectionAsGrapplePropulsion() == false)
                     Move(totalMovement);
             }
         }
@@ -289,7 +304,10 @@ public class PlayerMotor : MonoBehaviour
              checkGround = false;*/
 
         if (checkGround == true)
+        {
             playerRigidbody.gravityScale = initialGravity;
+            coyoteTime = CoyoteTimeStatuts.Grounded;
+        }
 
         isGrounded = checkGround;
 
@@ -298,6 +316,8 @@ public class PlayerMotor : MonoBehaviour
         else
             isFalling = true;
 
+        if (checkGround == false && coyoteTime == CoyoteTimeStatuts.Grounded)
+            StartCoroutine(CountCoyoteTime());
     }
 
     void CheckWalls()
@@ -351,4 +371,15 @@ public class PlayerMotor : MonoBehaviour
         }
     }
     #endregion
+
+    IEnumerator CountCoyoteTime()
+    {
+        if (coyoteTime != CoyoteTimeStatuts.Jumped)
+            coyoteTime = CoyoteTimeStatuts.StartedCounting;
+
+        yield return new WaitForSecondsRealtime(coyoteTimeDuration);
+
+        if (coyoteTime == CoyoteTimeStatuts.StartedCounting)
+            coyoteTime = CoyoteTimeStatuts.FinishedCounting;
+    }
 }

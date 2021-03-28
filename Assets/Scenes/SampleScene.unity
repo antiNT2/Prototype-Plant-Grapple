@@ -2234,12 +2234,13 @@ MonoBehaviour:
   playerRenderer: {fileID: 213810916}
   groundCheckDistance: 0.2
   groundCheckHeightOffset: -0.5
-  groundCheckersSeparationDistance: 0.1
+  groundCheckersSeparationDistance: 0.11
   isGrounded: 0
   isFalling: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 4608
+  coyoteTimeDuration: 0.2
   wallCheckDistance: 0.23
   wallCheckHeightOffset: 0
 --- !u!4 &1847731193
@@ -2323,7 +2324,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.09285545}
+  m_Offset: {x: -0.01322031, y: -0.09285545}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2334,7 +2335,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.40927023, y: 0.7805238}
+  m_Size: {x: 0.32239056, y: 0.7805238}
   m_EdgeRadius: 0
 --- !u!1001 &1866307604
 PrefabInstance:
