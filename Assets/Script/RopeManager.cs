@@ -16,7 +16,7 @@ public class RopeManager : MonoBehaviour
     [SerializeField]
     GameObject grappleIndicator;
     [SerializeField]
-    GameObject grappleDirectionIndicator;
+    SpriteRenderer grappleDirectionIndicator;
     PlayerInput playerInput;
     DistanceJoint2D endPointJoint;
 
@@ -346,8 +346,8 @@ public class RopeManager : MonoBehaviour
     (Vector2, Transform) DetectWallToGrapple(Vector2 direction)
     {
         Vector2 rayOrigin = playerInput.transform.position;
-        RaycastHit2D[] hit = Physics2D.RaycastAll(rayOrigin, direction, wallCheckDistance, grappleLayer);
-        Debug.DrawLine(rayOrigin, (Vector3)rayOrigin + (Vector3)(direction * wallCheckDistance), Color.red);
+        RaycastHit2D[] hit = Physics2D.RaycastAll(rayOrigin, direction.normalized, wallCheckDistance, grappleLayer);
+        Debug.DrawLine(rayOrigin, (Vector3)rayOrigin + (Vector3)(direction.normalized * wallCheckDistance), Color.red);
 
         for (int i = 0; i < hit.Length; i++)
         {

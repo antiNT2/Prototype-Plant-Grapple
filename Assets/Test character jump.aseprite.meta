@@ -27,6 +27,9 @@ ScriptedImporter:
   - animationName: Jump
     loopTime: 1
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 1; To: 1"
+  - animationName: Fall
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 2"
   atlas: {instanceID: 0}
   importType: 0
   bindType: 0

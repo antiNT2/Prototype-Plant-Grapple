@@ -86,15 +86,6 @@ public class PlayerMotor : MonoBehaviour
         totalMovement = inputAxis;
         totalMovement += knockbackAxis;
 
-        if (totalMovement != 0)
-        {
-            if (!ShouldUseForceMovement())
-            {
-                if (IsTryingToMoveInSameDirectionAsGrapplePropulsion() == false)
-                    Move(totalMovement);
-            }
-        }
-
         if (ShouldUseForceMovement())
             playerRigidbody.gravityScale = initialGravity;
 
@@ -108,6 +99,15 @@ public class PlayerMotor : MonoBehaviour
             if (ShouldUseForceMovement())
             {
                 GrappleMove(totalMovement);
+            }
+        }
+
+        if (totalMovement != 0)
+        {
+            if (!ShouldUseForceMovement())
+            {
+                if (IsTryingToMoveInSameDirectionAsGrapplePropulsion() == false)
+                    Move(totalMovement);
             }
         }
     }
@@ -139,8 +139,11 @@ public class PlayerMotor : MonoBehaviour
     {
         playerAnimator.SetBool("Walk", totalMovement != 0);
         playerAnimator.SetBool("Fall", isFalling);
-        if (isGrounded)
-            playerAnimator.SetBool("Descend", false);
+
+       /* if (isGrounded)
+            playerAnimator.SetBool("Descend", false);*/
+
+        playerAnimator.SetBool("Descend", (playerRigidbody.velocity.y <= 0 && !isGrounded));
     }
 
     #region Knockback
@@ -198,7 +201,6 @@ public class PlayerMotor : MonoBehaviour
             StartCoroutine(VerticalVelocityDecreaseRoutine());
         }
         playerRigidbody.gravityScale = initialGravity * 2f;
-        playerAnimator.SetBool("Descend", true);
 
         yield break;
 
@@ -247,9 +249,13 @@ public class PlayerMotor : MonoBehaviour
     {
         playerRigidbody.velocity = new Vector2(0f, playerRigidbody.velocity.y);
 
-        Vector2 movement = Vector2.right * speed * axis * Time.deltaTime;
+        Vector2 movement = Vector2.right * speed * axis;
+
         if ((axis > 0 && !wallRight) || (axis < 0 && !wallLeft))
-            this.transform.Translate(movement);
+        {
+            this.transform.Translate(movement * Time.deltaTime);
+            //playerRigidbody.velocity = new Vector2(speed * axis, playerRigidbody.velocity.y);
+        }
     }
 
     bool AxisIsOppositeToVelocity(float axis)
