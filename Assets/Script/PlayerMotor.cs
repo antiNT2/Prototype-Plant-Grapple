@@ -11,6 +11,7 @@ public class PlayerMotor : MonoBehaviour
     public float acceleration = 1.5f;
     public float jumpForce = 12f;
     public float moveForceGrapple = 1f;
+    public float velocityThatIsConsideredStrong = 0.5f;
     [SerializeField]
     SpriteRenderer playerRenderer;
 
@@ -21,7 +22,7 @@ public class PlayerMotor : MonoBehaviour
     public float totalMovement { get; private set; }
     Animator playerAnimator;
     Rigidbody2D playerRigidbody;
-    bool jumpButtonPressed;
+    public bool jumpButtonPressed { get; private set; }
     float initialGravity;
     CoyoteTimeStatuts coyoteTime;
     enum CoyoteTimeStatuts
@@ -100,16 +101,20 @@ public class PlayerMotor : MonoBehaviour
             {
                 GrappleMove(totalMovement);
             }
-        }
-
-        if (totalMovement != 0)
-        {
-            if (!ShouldUseForceMovement())
+            else
             {
-                if (IsTryingToMoveInSameDirectionAsGrapplePropulsion() == false)
+                if (IsTryingToMoveInSameDirectionAsGrapplePropulsion() == false || Mathf.Abs(playerRigidbody.velocity.x) <= velocityThatIsConsideredStrong)
                     Move(totalMovement);
+                else if (isFalling && Mathf.Abs(playerRigidbody.velocity.x) > velocityThatIsConsideredStrong)
+                    NerfHorizontalVelocity();
             }
         }
+        else if (IsBeingPropulsedByGrapple())
+        {
+            NerfHorizontalVelocity();
+        }
+
+        print(playerRigidbody.velocity.x);
     }
 
     bool ShouldUseForceMovement()
@@ -122,7 +127,17 @@ public class PlayerMotor : MonoBehaviour
 
     bool IsTryingToMoveInSameDirectionAsGrapplePropulsion()
     {
-        return (isFalling && RopeManager.instance.currentState == RopeManager.RopeState.Retracting && !AxisIsOppositeToVelocity(totalMovement) && Mathf.Abs(playerRigidbody.velocity.x) > 0.5f);
+        return (isFalling && Mathf.Abs(playerRigidbody.velocity.x) > velocityThatIsConsideredStrong && !AxisIsOppositeToVelocity(totalMovement));
+    }
+
+    bool IsBeingPropulsedByGrapple()
+    {
+        return (isFalling && RopeManager.instance.currentState == RopeManager.RopeState.Retracting && Mathf.Abs(playerRigidbody.velocity.x) > velocityThatIsConsideredStrong);
+    }
+
+    void NerfHorizontalVelocity()
+    {
+        playerRigidbody.velocity = Vector2.Lerp(playerRigidbody.velocity, new Vector2(0f, playerRigidbody.velocity.y), Time.fixedDeltaTime * 3f);
     }
 
     public void SetCorrectRenderOrientation(bool lookLeft)
@@ -140,8 +155,8 @@ public class PlayerMotor : MonoBehaviour
         playerAnimator.SetBool("Walk", totalMovement != 0);
         playerAnimator.SetBool("Fall", isFalling);
 
-       /* if (isGrounded)
-            playerAnimator.SetBool("Descend", false);*/
+        /* if (isGrounded)
+             playerAnimator.SetBool("Descend", false);*/
 
         playerAnimator.SetBool("Descend", (playerRigidbody.velocity.y <= 0 && !isGrounded));
     }
