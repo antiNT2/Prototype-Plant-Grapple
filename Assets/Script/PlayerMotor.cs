@@ -20,7 +20,7 @@ public class PlayerMotor : MonoBehaviour
     bool startedAcceleratingInput;
     float knockbackAxis;
     public float totalMovement { get; private set; }
-    Animator playerAnimator;
+    public Animator playerAnimator { get; private set; }
     Rigidbody2D playerRigidbody;
     public bool jumpButtonPressed { get; private set; }
     float initialGravity;
@@ -114,7 +114,7 @@ public class PlayerMotor : MonoBehaviour
             NerfHorizontalVelocity();
         }
 
-        print(playerRigidbody.velocity.x);
+        //print(playerRigidbody.velocity.x);
     }
 
     bool ShouldUseForceMovement()
@@ -159,6 +159,9 @@ public class PlayerMotor : MonoBehaviour
              playerAnimator.SetBool("Descend", false);*/
 
         playerAnimator.SetBool("Descend", (playerRigidbody.velocity.y <= 0 && !isGrounded));
+
+        //if(IsBeingPropulsedByGrapple())
+            playerAnimator.SetBool("RollJump", IsBeingPropulsedByGrapple());
     }
 
     #region Knockback

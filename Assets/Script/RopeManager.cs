@@ -53,6 +53,7 @@ public class RopeManager : MonoBehaviour
     Vector2 lastJoystickPos;
     Transform lastGrapplePoint;
     Transform pullingObject;
+    bool invertYAxis = false;
 
     public float maxRopeLength;
     public float propulsionSpeed;
@@ -79,6 +80,9 @@ public class RopeManager : MonoBehaviour
         playerInput = FindObjectOfType<PlayerInput>();
         playerRigidbody = playerInput.GetComponent<Rigidbody2D>();
         endPointJoint = endPos.GetComponent<DistanceJoint2D>();
+
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            invertYAxis = true;
     }
 
     private void Update()
@@ -110,7 +114,7 @@ public class RopeManager : MonoBehaviour
             armEndObject.transform.parent = null;
             armEndObject.position = armRenderer.GetPosition(armRenderer.positionCount - 1);
 
-            if (armEndObject.position == endPos.position)
+            if (Vector2.Distance(armEndObject.position, endPos.position) < 0.1f)
             {
                 OnGrappleLock();
             }
@@ -142,6 +146,10 @@ public class RopeManager : MonoBehaviour
         ShowGrappleDirectionIndicator();
 
         actualAngleTest = GetGrappleAngle();
+
+        if (Input.GetKeyDown(KeyCode.P))
+            invertYAxis = !invertYAxis;
+            
     }
 
     private void FixedUpdate()
@@ -197,6 +205,7 @@ public class RopeManager : MonoBehaviour
             else
             {
                 currentState = RopeState.LockedOn;
+                armEndObject.parent = endPos.transform;
                 playerRigidbody.AddForce((endPos.transform.position - playerRigidbody.transform.position).normalized * initialPropulsionImpulse, ForceMode2D.Impulse);
             }
 
@@ -236,7 +245,7 @@ public class RopeManager : MonoBehaviour
         AlignHandWithRope.instance.transform.position = restingPos.position;
         pullSpringJoint.enabled = false;
 
-        if (armEndObject.parent == null)
+        if (armEndObject.parent != restingPos)
         {
             armEndObject.parent = restingPos;
             armEndObject.transform.position = restingPos.position;
@@ -252,8 +261,12 @@ public class RopeManager : MonoBehaviour
         //playerInput.actions.FindAction("Move").ReadValue<Vector2>()
         if (playerInput.currentControlScheme == "Gamepad")
         {
+            Vector2 gamePadStickValue = playerInput.actions.FindAction("Move").ReadValue<Vector2>().normalized;
+            if (invertYAxis)
+                gamePadStickValue.y = -gamePadStickValue.y;
+            
             if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
-                lastJoystickPos = playerInput.actions.FindAction("Move").ReadValue<Vector2>().normalized;
+                lastJoystickPos = gamePadStickValue;
             return lastJoystickPos;
         }
         else
@@ -285,21 +298,29 @@ public class RopeManager : MonoBehaviour
             }
             else
             {
-                currentState = RopeState.Retracting;
+                FinishPropulsion();
                 //Debug.Log("RETRACTING WITH high ANGLE, current angle was " + GetGrappleAngle());
             }
         }
 
         if (playerRigidbody.velocity.magnitude <= 0.1f)
-            currentState = RopeState.Retracting;
+            FinishPropulsion();
 
         if (Mathf.Abs(PlayerMotor.instance.totalMovement) >= 1f && Mathf.Sign(forceToAdd.x) != Mathf.Sign(PlayerMotor.instance.totalMovement) && Mathf.Abs(GetGrappleAngle()) >= 90f)
-            currentState = RopeState.Retracting;
+            FinishPropulsion();
 
         /* if (distanceBetweenPlayerAndEndPos.magnitude > maxRopeLength)
              ApplyPropulsion();
          else
              currentState = RopeState.Retracting;*/
+    }
+
+    void FinishPropulsion()
+    {
+        currentState = RopeState.Retracting;
+
+        if(playerRigidbody.velocity.magnitude > PlayerMotor.instance.velocityThatIsConsideredStrong)
+        PlayerMotor.instance.playerAnimator.Play("RollJump");
     }
 
     void ApplyPropulsion()
@@ -321,6 +342,7 @@ public class RopeManager : MonoBehaviour
         {
             StartCoroutine(SetLastGrapplePoint(touchedWall.Item2));
             endPos.position = touchedWall.Item1;
+            endPos.transform.parent = touchedWall.Item2;
             PlayerMotor.instance.SetCorrectRenderOrientation((touchedWall.Item1 - (Vector2)playerRigidbody.transform.position).x > 0 ? false : true);
             endPointJoint.enabled = true;
             currentState = RopeState.Traveling;
