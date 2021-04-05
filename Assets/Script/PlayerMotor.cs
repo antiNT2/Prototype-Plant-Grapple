@@ -158,10 +158,10 @@ public class PlayerMotor : MonoBehaviour
         /* if (isGrounded)
              playerAnimator.SetBool("Descend", false);*/
 
-        playerAnimator.SetBool("Descend", (playerRigidbody.velocity.y <= 0 && !isGrounded));
+        playerAnimator.SetBool("Descend", (playerRigidbody.velocity.y <= 0.1f && !isGrounded));
 
         //if(IsBeingPropulsedByGrapple())
-            playerAnimator.SetBool("RollJump", IsBeingPropulsedByGrapple());
+        playerAnimator.SetBool("RollJump", IsBeingPropulsedByGrapple());
     }
 
     #region Knockback
@@ -309,21 +309,21 @@ public class PlayerMotor : MonoBehaviour
 
         if (groundHit1.collider != null)
         {
-            if (groundHit1.collider.isTrigger == false)
+            if (CollidedGroundIsValid(groundHit1.collider))
                 checkGround = true;
             else
                 checkGround = false;
         }
         else if (groundHit2.collider != null)
         {
-            if (groundHit2.collider.isTrigger == false)
+            if (CollidedGroundIsValid(groundHit2.collider))
                 checkGround = true;
             else
                 checkGround = false;
         }
         else if (groundHit3.collider != null)
         {
-            if (groundHit3.collider.isTrigger == false)
+            if (CollidedGroundIsValid(groundHit3.collider))
                 checkGround = true;
             else
                 checkGround = false;
@@ -352,6 +352,14 @@ public class PlayerMotor : MonoBehaviour
 
         if (checkGround == false && coyoteTime == CoyoteTimeStatuts.Grounded)
             StartCoroutine(CountCoyoteTime());
+    }
+
+    bool CollidedGroundIsValid(Collider2D collider)
+    {
+        if (collider.isTrigger == false && (RopeManager.instance.pullingObject == null || RopeManager.instance.pullingObject != collider.transform))
+            return true;
+        else
+            return false;
     }
 
     void CheckWalls()

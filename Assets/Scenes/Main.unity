@@ -637,7 +637,7 @@ MonoBehaviour:
   armRenderer: {fileID: 241914909}
   grappleIndicator: {fileID: 309653479}
   grappleDirectionIndicator: {fileID: 1341612812}
-  pullSpringJoint: {fileID: 1685018869}
+  pullJoint: {fileID: 1847731197}
   startPos: {fileID: 1792346081}
   endPos: {fileID: 1685018863}
   restingPos: {fileID: 728112436}
@@ -652,6 +652,7 @@ MonoBehaviour:
     m_Bits: 4096
   initialPropulsionImpulse: 15
   delayBetweenGrabs: 0.1
+  pullDistanceJoint: 1
   maxRopeLength: 1
   propulsionSpeed: 50
   grappleDirectionIndicatorRadius: 1
@@ -1024,7 +1025,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 3
+  m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -1273,7 +1274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &587082792
 Rigidbody2D:
   serializedVersion: 4
@@ -1286,7 +1287,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 3
+  m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -1380,7 +1381,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 587082791}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.66, y: 14.46, z: -4.0097656}
+  m_LocalPosition: {x: 4.62, y: 2.44, z: -4.0097656}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2309,7 +2310,6 @@ GameObject:
   - component: {fileID: 1685018864}
   - component: {fileID: 1685018866}
   - component: {fileID: 1685018867}
-  - component: {fileID: 1685018868}
   - component: {fileID: 1685018869}
   m_Layer: 11
   m_Name: End
@@ -2406,26 +2406,6 @@ DistanceJoint2D:
   m_AutoConfigureDistance: 0
   m_Distance: 3.1197755
   m_MaxDistanceOnly: 1
---- !u!231 &1685018868
-SpringJoint2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1685018862}
-  m_Enabled: 0
-  serializedVersion: 4
-  m_EnableCollision: 0
-  m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0, y: 0}
-  m_AutoConfigureDistance: 0
-  m_Distance: 0.005
-  m_DampingRatio: 0
-  m_Frequency: 1
 --- !u!232 &1685018869
 DistanceJoint2D:
   m_ObjectHideFlags: 0
@@ -2563,6 +2543,7 @@ GameObject:
   - component: {fileID: 1847731195}
   - component: {fileID: 1847731194}
   - component: {fileID: 1847731192}
+  - component: {fileID: 1847731197}
   m_Layer: 11
   m_Name: TEST CHARACTER
   m_TagString: Untagged
@@ -2694,6 +2675,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.25, y: 0.7805238}
   m_EdgeRadius: 0
+--- !u!232 &1847731197
+DistanceJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847731191}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_AutoConfigureDistance: 0
+  m_Distance: 4
+  m_MaxDistanceOnly: 1
 --- !u!1001 &1866307604
 PrefabInstance:
   m_ObjectHideFlags: 0

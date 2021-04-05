@@ -21,7 +21,7 @@ public class RopeManager : MonoBehaviour
     DistanceJoint2D endPointJoint;
 
     [SerializeField]
-    Joint2D pullSpringJoint;
+    DistanceJoint2D pullJoint;
 
     [SerializeField]
     Transform startPos;
@@ -46,13 +46,15 @@ public class RopeManager : MonoBehaviour
     Rigidbody2D playerRigidbody;
     public float initialPropulsionImpulse;
     public float delayBetweenGrabs = 0.1f;
+    public float pullDistanceJoint = 1f;
 
 
     float lastVelocity = 0f;
     float lastGrabTime;
+    bool shouldStayAttachedToPoint;
     Vector2 lastJoystickPos;
     Transform lastGrapplePoint;
-    Transform pullingObject;
+    public Transform pullingObject { get; private set; }
     bool invertYAxis = false;
 
     public float maxRopeLength;
@@ -91,9 +93,9 @@ public class RopeManager : MonoBehaviour
         {
             ApplyRestPosEffects();
         }
-        else if (currentState == RopeState.Retracting || currentState == RopeState.Pulling)
+        else if (currentState == RopeState.Retracting /*|| currentState == RopeState.Pulling*/)
         {
-
+            shouldStayAttachedToPoint = false;
             armRenderer.enabled = true;
             if (Vector2.Distance(endPos.position, restingPos.position) > 0.1f)
             {
@@ -119,7 +121,18 @@ public class RopeManager : MonoBehaviour
                 OnGrappleLock();
             }
         }
+        else if (currentState == RopeState.Pulling)
+        {
+            armEndObject.position = endPos.position;
+            if (pullJoint.distance > pullDistanceJoint + 0.2f)
+                pullJoint.distance = Mathf.Lerp(pullJoint.distance, pullDistanceJoint, Time.deltaTime * 3f);
 
+            if (playerInput.actions.FindAction("Grapple").phase != InputActionPhase.Started)
+            {
+                pullingObject = null;
+                currentState = RopeState.Retracting;
+            }
+        }
 
         if (currentState == RopeState.Rest || currentState == RopeState.Retracting || currentState == RopeState.Pulling)
         {
@@ -131,13 +144,21 @@ public class RopeManager : MonoBehaviour
         }
         if (currentState == RopeState.LockedOn)
         {
-
-            if (playerInput.actions.FindAction("Grapple").triggered)
-                currentState = RopeState.Retracting;
-
-            if (HasCollidedWhileFlying())
+            if (!shouldStayAttachedToPoint)
             {
-                currentState = RopeState.Retracting;
+                if (playerInput.actions.FindAction("Grapple").triggered)
+                    currentState = RopeState.Retracting;
+
+                if (HasCollidedWhileFlying())
+                {
+                    currentState = RopeState.Retracting;
+                }
+            }
+            else
+            {
+                if (playerInput.actions.FindAction("Grapple").phase != InputActionPhase.Started)
+                    currentState = RopeState.Retracting;
+                //print(playerInput.actions.FindAction("Grapple").phase);
             }
         }
 
@@ -149,7 +170,7 @@ public class RopeManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
             invertYAxis = !invertYAxis;
-            
+
     }
 
     private void FixedUpdate()
@@ -195,18 +216,30 @@ public class RopeManager : MonoBehaviour
             //print("Arrived, " + armEndObject.position + " / " + endPos.position);
             print("Last Grapple point " + lastGrapplePoint);
 
-            if (playerInput.actions.FindAction("Grapple").phase == InputActionPhase.Started && pullingObject != null && pullLayer == (pullLayer | (1 << pullingObject.gameObject.layer))) //if we are holding button and object is pullable
+            if (playerInput.actions.FindAction("Grapple").phase == InputActionPhase.Started && pullingObject != null) //if we are holding button
             {
-                lastGrapplePoint = null;
-                pullSpringJoint.connectedBody = pullingObject.gameObject.GetComponent<Rigidbody2D>();
-                pullSpringJoint.enabled = true;
-                currentState = RopeState.Pulling;
+                if (pullLayer == (pullLayer | (1 << pullingObject.gameObject.layer))) //if object is pullable
+                {
+                    lastGrapplePoint = null;
+                    endPointJoint.enabled = false;
+                    pullJoint.connectedBody = pullingObject.gameObject.GetComponent<Rigidbody2D>();
+
+                    pullJoint.distance = Vector2.Distance(pullJoint.transform.position, pullingObject.position);
+                    if (pullJoint.distance < pullDistanceJoint)
+                        pullJoint.distance = pullDistanceJoint;
+
+                    pullJoint.enabled = true;
+                    currentState = RopeState.Pulling;
+                }
+                else
+                {
+                    shouldStayAttachedToPoint = true;
+                    LockOn();
+                }
             }
             else
             {
-                currentState = RopeState.LockedOn;
-                armEndObject.parent = endPos.transform;
-                playerRigidbody.AddForce((endPos.transform.position - playerRigidbody.transform.position).normalized * initialPropulsionImpulse, ForceMode2D.Impulse);
+                LockOn();
             }
 
             CustomFunctions.CameraShake();
@@ -243,7 +276,7 @@ public class RopeManager : MonoBehaviour
         grappleScript.enabled = false;
         armRenderer.enabled = false;
         AlignHandWithRope.instance.transform.position = restingPos.position;
-        pullSpringJoint.enabled = false;
+        pullJoint.enabled = false;
 
         if (armEndObject.parent != restingPos)
         {
@@ -256,6 +289,13 @@ public class RopeManager : MonoBehaviour
             AlignHandWithRope.instance.enabled = false;
     }
 
+    void LockOn()
+    {
+        currentState = RopeState.LockedOn;
+        armEndObject.parent = endPos.transform;
+        playerRigidbody.AddForce((endPos.transform.position - playerRigidbody.transform.position).normalized * initialPropulsionImpulse, ForceMode2D.Impulse);
+    }
+
     Vector2 GetGrappleDirection()
     {
         //playerInput.actions.FindAction("Move").ReadValue<Vector2>()
@@ -264,7 +304,7 @@ public class RopeManager : MonoBehaviour
             Vector2 gamePadStickValue = playerInput.actions.FindAction("Move").ReadValue<Vector2>().normalized;
             if (invertYAxis)
                 gamePadStickValue.y = -gamePadStickValue.y;
-            
+
             if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
                 lastJoystickPos = gamePadStickValue;
             return lastJoystickPos;
@@ -285,7 +325,8 @@ public class RopeManager : MonoBehaviour
                 ApplyPropulsion();
             else
             {
-                currentState = RopeState.Retracting;
+                //currentState = RopeState.Retracting;
+                FinishPropulsion();
                 // Debug.Log("RETRACTING WITH LOW ANGLE");
             }
         }
@@ -317,10 +358,13 @@ public class RopeManager : MonoBehaviour
 
     void FinishPropulsion()
     {
-        currentState = RopeState.Retracting;
+        if (!shouldStayAttachedToPoint)
+        {
+            currentState = RopeState.Retracting;
 
-        if(playerRigidbody.velocity.magnitude > PlayerMotor.instance.velocityThatIsConsideredStrong)
-        PlayerMotor.instance.playerAnimator.Play("RollJump");
+            if (playerRigidbody.velocity.magnitude > PlayerMotor.instance.velocityThatIsConsideredStrong)
+                PlayerMotor.instance.playerAnimator.Play("RollJump");
+        }
     }
 
     void ApplyPropulsion()
