@@ -205,8 +205,13 @@ public class RopeManager : MonoBehaviour
 
     void ShowGrappleDirectionIndicator()
     {
-        float angle = Mathf.Atan2(GetGrappleDirection().y, GetGrappleDirection().x);
+        float angle = GetGrappleDirectionAngle();
         grappleDirectionIndicator.transform.localPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * grappleDirectionIndicatorRadius;
+    }
+
+    public float GetGrappleDirectionAngle()
+    {
+        return Mathf.Atan2(GetGrappleDirection().y, GetGrappleDirection().x);
     }
 
     void OnGrappleLock()

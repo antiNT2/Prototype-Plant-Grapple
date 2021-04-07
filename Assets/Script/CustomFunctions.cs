@@ -47,6 +47,11 @@ public class CustomFunctions : MonoBehaviour
         }
     }
 
+    public static void FadeOut(SpriteRenderer renderer, float duration)
+    {
+        instance.StartCoroutine(instance.FadeOutRoutine(renderer, duration));
+    }
+
     IEnumerator VibrationRoutine(float lowFrequency, float highFrequency)
     {
         if (Gamepad.current != null)
@@ -54,6 +59,21 @@ public class CustomFunctions : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.15f);
         if (Gamepad.current != null)
             Gamepad.current.SetMotorSpeeds(0f, 0f);
+    }
+
+    IEnumerator FadeOutRoutine(SpriteRenderer renderer, float duration)
+    {
+        Color initialColor = renderer.color;
+        Color finalColor = renderer.color;
+        finalColor.a = 0;
+        float timer = 0;
+
+        while (timer < 1)
+        {
+            renderer.color = Color.Lerp(initialColor, finalColor, timer);
+            timer += Time.deltaTime / duration;
+            yield return new WaitForEndOfFrame();
+        }
     }
 
   /*  public static void HitBlink(SpriteRenderer characterBlinking, IDamageable characterDamaged)

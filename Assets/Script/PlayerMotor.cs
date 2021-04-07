@@ -369,7 +369,7 @@ public class PlayerMotor : MonoBehaviour
         Debug.DrawLine(rayOrigin, (Vector3)rayOrigin + (Vector3)(Vector2.left * wallCheckDistance), Color.red);
         if (hitLeft.collider != null)
         {
-            if (hitLeft.collider.isTrigger == false)
+            if (CollidedGroundIsValid(hitLeft.collider))
                 wallLeft = true;
             else
                 wallLeft = false;
@@ -386,7 +386,7 @@ public class PlayerMotor : MonoBehaviour
         Debug.DrawLine(rayOrigin, (Vector3)rayOrigin + (Vector3)(Vector2.right * wallCheckDistance), Color.red);
         if (hitRight.collider != null)
         {
-            if (hitRight.collider.isTrigger == false)
+            if (CollidedGroundIsValid(hitRight.collider))
                 wallRight = true;
             else
                 wallRight = false;
