@@ -16,6 +16,6 @@ public class HitboxTrigger : MonoBehaviour
         print(knockback);
 
         if (collision.GetComponent<IDamageable>() != null)
-            collision.GetComponent<IDamageable>().Damage(damage, knockback);
+            collision.GetComponent<IDamageable>().Damage(damage, knockback, angle);
     }
 }

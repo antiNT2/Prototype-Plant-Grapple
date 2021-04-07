@@ -144,22 +144,22 @@ public class RopeManager : MonoBehaviour
         }
         if (currentState == RopeState.LockedOn)
         {
-            if (!shouldStayAttachedToPoint)
-            {
+            //if (!shouldStayAttachedToPoint)
+            //{
                 if (playerInput.actions.FindAction("Grapple").triggered)
                     currentState = RopeState.Retracting;
 
-                if (HasCollidedWhileFlying())
+                if (HasCollidedWhileFlying() && playerInput.actions.FindAction("Grapple").phase != InputActionPhase.Started)
                 {
                     currentState = RopeState.Retracting;
                 }
-            }
-            else
+            //}
+            /*else
             {
                 if (playerInput.actions.FindAction("Grapple").phase != InputActionPhase.Started)
                     currentState = RopeState.Retracting;
                 //print(playerInput.actions.FindAction("Grapple").phase);
-            }
+            }*/
         }
 
         ShowGrapplePoint();
@@ -238,7 +238,7 @@ public class RopeManager : MonoBehaviour
                 }
                 else
                 {
-                    shouldStayAttachedToPoint = true;
+                    //shouldStayAttachedToPoint = true;
                     LockOn();
                 }
             }
@@ -363,7 +363,7 @@ public class RopeManager : MonoBehaviour
 
     void FinishPropulsion()
     {
-        if (!shouldStayAttachedToPoint)
+        if (playerInput.actions.FindAction("Grapple").phase != InputActionPhase.Started)
         {
             currentState = RopeState.Retracting;
 
