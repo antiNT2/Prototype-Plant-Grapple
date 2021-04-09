@@ -14,7 +14,9 @@ public class PunchAttack : MonoBehaviour
     [SerializeField]
     LineRenderer punchArmRope;
     [SerializeField]
-    GameObject hitbox;
+    EdgeCollider2D hitbox;
+    [SerializeField]
+    Collider2D fistHitbox;
     [SerializeField]
     AudioClip punchSound;
 
@@ -24,11 +26,14 @@ public class PunchAttack : MonoBehaviour
     public float windupTime = 0.2f;
     public float impactDuration = 1f;
     public float travelSpeed = 15f;
+    public float secondaryPunchPositionLength = 2.0f;
     public bool instantTravel = true;
 
     Vector2 targetPosition;
     Coroutine fadeOutCoroutine;
     PlayerInput playerInput;
+    float originalFistOrientation;
+    List<Vector2> additionalStartPositions = new List<Vector2>();
 
     PunchStatuts currentPunchStatuts;
     public enum PunchStatuts
@@ -45,6 +50,8 @@ public class PunchAttack : MonoBehaviour
         fistObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
         ResetPunch();
         playerInput = GetComponent<PlayerInput>();
+
+        fistHitbox.GetComponent<HitboxTrigger>().OnHit += (Collider2D) => ImpactPunch();
     }
 
     private void Update()
@@ -96,6 +103,7 @@ public class PunchAttack : MonoBehaviour
             Invoke("TravelPunch", windupTime);
 
         fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
+        originalFistOrientation = fistObject.transform.rotation.eulerAngles.z;
     }
 
     void ImpactPunch()
@@ -104,40 +112,62 @@ public class PunchAttack : MonoBehaviour
             punchAnimator.Play("Impact");
         CustomFunctions.CameraShake();
 
-        if (instantTravel)
-            SetHitbox();
+        /* if (instantTravel)
+             SetHitbox();*/
 
-        hitbox.SetActive(true);
+        //ToggleHitbox(true);
 
-        //hitbox.transform.localScale = new Vector3(1, 1, 1);
         currentPunchStatuts = PunchStatuts.Impact;
         fistObject.transform.parent = null;
-        fistObject.transform.position = targetPosition;
-        Invoke("Retract", impactDuration);
-
+        //fistObject.transform.position = targetPosition;
         fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
+
+        float deltaPunchOrientation = Mathf.Abs(fistObject.transform.rotation.eulerAngles.z - originalFistOrientation);
+
+        if (additionalStartPositions.Count < 2 && deltaPunchOrientation > 25f && playerInput.actions.FindAction("Attack").phase == InputActionPhase.Started)
+        {
+            TravelAgain(fistObject.transform.position, fistObject.transform.rotation.eulerAngles.z);
+        }
+        else
+            Invoke("Retract", impactDuration);
+
     }
 
     void TravelPunch()
     {
-        SetHitbox();
+        /*SetHitbox();*/
+        ToggleHitbox(true);
         punchAnimator.Play("Impact");
         currentPunchStatuts = PunchStatuts.Travel;
         fistObject.transform.parent = null;
-
-        //Debug.Break();
     }
 
     void SetHitbox()
     {
-        hitbox.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
-        hitbox.transform.position = fistObject.transform.position;
+        List<Vector2> newPoints = new List<Vector2>() { punchParent.position, fistObject.transform.position };
+
+        hitbox.SetPoints(newPoints);
+    }
+
+    void ToggleHitbox(bool enable)
+    {
+        hitbox.gameObject.SetActive(enable);
+        fistHitbox.enabled = enable;
     }
 
     void Retract()
     {
-        hitbox.SetActive(false);
+        ToggleHitbox(false);
+        additionalStartPositions.Clear();
         currentPunchStatuts = PunchStatuts.Retracting;
+    }
+
+    void TravelAgain(Vector2 additionalStartPos, float angleDirection)
+    {
+        originalFistOrientation = fistObject.transform.rotation.eulerAngles.z;
+        additionalStartPositions.Add(additionalStartPos);
+        targetPosition = additionalStartPos + (new Vector2(Mathf.Cos(angleDirection * Mathf.Deg2Rad), Mathf.Sin(angleDirection * Mathf.Deg2Rad))) * (secondaryPunchPositionLength / additionalStartPositions.Count);
+        currentPunchStatuts = PunchStatuts.Travel;
     }
 
     void ResetPunch()
@@ -150,8 +180,15 @@ public class PunchAttack : MonoBehaviour
 
     void SetRopePosition()
     {
+        punchArmRope.positionCount = additionalStartPositions.Count + 2;
         punchArmRope.SetPosition(0, punchParent.position);
-        punchArmRope.SetPosition(1, fistObject.transform.position);
+        for (int i = 0; i < additionalStartPositions.Count; i++)
+        {
+            punchArmRope.SetPosition(i + 1, additionalStartPositions[i]);
+        }
+        punchArmRope.SetPosition(additionalStartPositions.Count + 1, fistObject.transform.position);
+
+        SetHitbox();
     }
 
     IEnumerator FadeOutRoutine(SpriteRenderer renderer, float duration)
