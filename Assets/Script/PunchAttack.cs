@@ -84,6 +84,9 @@ public class PunchAttack : MonoBehaviour
                 ImpactPunch();
             }
         }
+
+        if (currentPunchStatuts == PunchStatuts.Impact)
+            CheckIfWantToTravelAgain();
     }
 
     void StartPunch()
@@ -120,17 +123,9 @@ public class PunchAttack : MonoBehaviour
         currentPunchStatuts = PunchStatuts.Impact;
         fistObject.transform.parent = null;
         //fistObject.transform.position = targetPosition;
-        fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
+        //fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
 
-        float deltaPunchOrientation = Mathf.Abs(fistObject.transform.rotation.eulerAngles.z - originalFistOrientation);
-
-        if (additionalStartPositions.Count < 2 && deltaPunchOrientation > 25f && playerInput.actions.FindAction("Attack").phase == InputActionPhase.Started)
-        {
-            TravelAgain(fistObject.transform.position, fistObject.transform.rotation.eulerAngles.z);
-        }
-        else
-            Invoke("Retract", impactDuration);
-
+        Invoke("Retract", impactDuration);
     }
 
     void TravelPunch()
@@ -157,9 +152,32 @@ public class PunchAttack : MonoBehaviour
 
     void Retract()
     {
+        CheckIfWantToTravelAgain(true);
+
+        if (currentPunchStatuts != PunchStatuts.Impact)
+            return;
+
         ToggleHitbox(false);
         additionalStartPositions.Clear();
         currentPunchStatuts = PunchStatuts.Retracting;
+    }
+
+    void CheckIfWantToTravelAgain(bool retractDelayHasPassed = false)
+    {
+        float deltaPunchOrientation = Mathf.Abs(fistObject.transform.rotation.eulerAngles.z - originalFistOrientation);
+
+        if (currentPunchStatuts == PunchStatuts.Impact && additionalStartPositions.Count < 1)
+        {
+            if (playerInput.actions.FindAction("Attack").phase == InputActionPhase.Started)
+                fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
+            
+
+            if (additionalStartPositions.Count < 1 && deltaPunchOrientation > 25f /*&& (playerInput.actions.FindAction("Attack").phase != InputActionPhase.Started || retractDelayHasPassed)*/)
+            {
+                CancelInvoke("Retract");
+                TravelAgain(fistObject.transform.position, fistObject.transform.rotation.eulerAngles.z);
+            }
+        }
     }
 
     void TravelAgain(Vector2 additionalStartPos, float angleDirection)
@@ -181,12 +199,12 @@ public class PunchAttack : MonoBehaviour
     void SetRopePosition()
     {
         punchArmRope.positionCount = additionalStartPositions.Count + 2;
-        punchArmRope.SetPosition(0, punchParent.position);
+        punchArmRope.SetPosition(0, (Vector2)punchParent.position);
         for (int i = 0; i < additionalStartPositions.Count; i++)
         {
-            punchArmRope.SetPosition(i + 1, additionalStartPositions[i]);
+            punchArmRope.SetPosition(i + 1, (Vector2)additionalStartPositions[i]);
         }
-        punchArmRope.SetPosition(additionalStartPositions.Count + 1, fistObject.transform.position);
+        punchArmRope.SetPosition(additionalStartPositions.Count + 1, (Vector2)fistObject.transform.position);
 
         SetHitbox();
     }

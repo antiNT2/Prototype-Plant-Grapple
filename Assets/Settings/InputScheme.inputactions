@@ -198,7 +198,7 @@
                     "id": "e62cc1d0-725c-473e-a5e2-0160014c293d",
                     "path": "2DVector(mode=2)",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "groups": "",
                     "action": "Move",
                     "isComposite": true,
