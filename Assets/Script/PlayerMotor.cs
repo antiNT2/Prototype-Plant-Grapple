@@ -92,6 +92,11 @@ public class PlayerMotor : MonoBehaviour
         if (ShouldUseForceMovement())
             playerRigidbody.gravityScale = initialGravity;
 
+        if (ShouldFreezeHorizontalRigidbody())
+            playerRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        else
+            playerRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
         SetAnimations();
     }
 
@@ -177,6 +182,7 @@ public class PlayerMotor : MonoBehaviour
                 knockbackAxis *= -1f;
         }
 
+        StopCoroutine("ReduceKnockbackRoutine");
         StartCoroutine(ReduceKnockbackRoutine());
     }
 
@@ -274,7 +280,7 @@ public class PlayerMotor : MonoBehaviour
         if (isGrounded && groundNormal != null)
             direction = new Vector2(groundNormal.y, -groundNormal.x);
 
-        print(direction);
+       // print(direction);
 
         Vector2 movement = direction * speed * axis;
 
@@ -359,12 +365,6 @@ public class PlayerMotor : MonoBehaviour
         {
             playerRigidbody.gravityScale = initialGravity;
             coyoteTime = CoyoteTimeStatuts.Grounded;
-
-            playerRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        }
-        else
-        {
-            playerRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         isGrounded = checkGround;
@@ -437,16 +437,24 @@ public class PlayerMotor : MonoBehaviour
 
     void MoveAwayFromWall(bool right, float wallDistance)
     {
-       /* if (right == false)
+        if (right == false)
         {
             transform.position = new Vector3(transform.position.x + (wallCheckDistance - wallDistance), transform.position.y, transform.position.z);
         }
         else
         {
             transform.position = new Vector3(transform.position.x - (wallCheckDistance - wallDistance), transform.position.y, transform.position.z);
-        }*/
+        }
     }
     #endregion
+
+    bool ShouldFreezeHorizontalRigidbody()
+    {
+        if (isGrounded && RopeManager.instance.currentState != RopeManager.RopeState.LockedOn)
+            return true;
+
+        return false;
+    }
 
     IEnumerator CountCoyoteTime()
     {

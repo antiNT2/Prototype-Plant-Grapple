@@ -33,6 +33,7 @@ public class PunchAttack : MonoBehaviour
     Coroutine fadeOutCoroutine;
     PlayerInput playerInput;
     float originalFistOrientation;
+    bool hasInflictedDamageWithThisPunch;
     List<Vector2> additionalStartPositions = new List<Vector2>();
 
     PunchStatuts currentPunchStatuts;
@@ -52,6 +53,7 @@ public class PunchAttack : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
 
         fistHitbox.GetComponent<HitboxTrigger>().OnHit += (Collider2D) => ImpactPunch();
+        fistHitbox.GetComponent<HitboxTrigger>().OnHit += (Collider2D) => hasInflictedDamageWithThisPunch = true;
     }
 
     private void Update()
@@ -152,7 +154,7 @@ public class PunchAttack : MonoBehaviour
 
     void Retract()
     {
-        CheckIfWantToTravelAgain(true);
+        CheckIfWantToTravelAgain();
 
         if (currentPunchStatuts != PunchStatuts.Impact)
             return;
@@ -162,11 +164,11 @@ public class PunchAttack : MonoBehaviour
         currentPunchStatuts = PunchStatuts.Retracting;
     }
 
-    void CheckIfWantToTravelAgain(bool retractDelayHasPassed = false)
+    void CheckIfWantToTravelAgain()
     {
         float deltaPunchOrientation = Mathf.Abs(fistObject.transform.rotation.eulerAngles.z - originalFistOrientation);
 
-        if (currentPunchStatuts == PunchStatuts.Impact && additionalStartPositions.Count < 1)
+        if (currentPunchStatuts == PunchStatuts.Impact && additionalStartPositions.Count < 1 && hasInflictedDamageWithThisPunch == false)
         {
             if (playerInput.actions.FindAction("Attack").phase == InputActionPhase.Started)
                 fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
@@ -193,6 +195,7 @@ public class PunchAttack : MonoBehaviour
         currentPunchStatuts = PunchStatuts.None;
         fistObject.transform.position = punchParent.position;
         fistObject.transform.parent = punchParent;
+        hasInflictedDamageWithThisPunch = false;
         fadeOutCoroutine = StartCoroutine(FadeOutRoutine(fistObject.GetComponent<SpriteRenderer>(), 0.2f));
     }
 

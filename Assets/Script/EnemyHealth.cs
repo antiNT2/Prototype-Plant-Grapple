@@ -20,13 +20,17 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     void IDamageable.Damage(int damageAmount, Vector2 knockbackDirection, float damageAngle)
     {
         SpawnExplosion(damageAngle);
-        GetComponent<Rigidbody2D>().AddForce(knockbackDirection, ForceMode2D.Impulse);
+
+        if (GetComponent<IMotor>() != null)
+            GetComponent<IMotor>().SetKnockback(knockbackDirection.x);
+        //GetComponent<Rigidbody2D>().AddForce(knockbackDirection, ForceMode2D.Impulse);
+
         StartCoroutine(DamageRoutine());
         CustomFunctions.PlaySound(hitSound, 0.5f, true);
         health--;
 
         if (health <= 0)
-            Destroy(this.gameObject);   
+            Destroy(this.gameObject);
     }
 
     void SpawnExplosion(float angle)
@@ -34,7 +38,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         GameObject explosion = Instantiate(explosionPrefab);
         explosion.transform.position = this.transform.position;
         explosion.transform.rotation = Quaternion.Euler(0, 0, angle);
-       // explosion.GetComponent<SpriteRenderer>().flipX = knockbackDirection.x < 0;
+        // explosion.GetComponent<SpriteRenderer>().flipX = knockbackDirection.x < 0;
         Destroy(explosion, 0.4f);
     }
 

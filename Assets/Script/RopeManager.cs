@@ -219,7 +219,7 @@ public class RopeManager : MonoBehaviour
         if (currentState == RopeState.Traveling)
         {
             //print("Arrived, " + armEndObject.position + " / " + endPos.position);
-            print("Last Grapple point " + lastGrapplePoint);
+            //print("Last Grapple point " + lastGrapplePoint);
 
             if (playerInput.actions.FindAction("Grapple").phase == InputActionPhase.Started && pullingObject != null) //if we are holding button
             {
