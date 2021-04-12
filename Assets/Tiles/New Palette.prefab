@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1037650106359414917}
   - component: {fileID: 7496072380698977005}
   - component: {fileID: 8879989226607054829}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Layer1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,6 +41,16 @@ Tilemap:
   m_GameObject: {fileID: 808581224546924013}
   m_Enabled: 1
   m_Tiles:
+  - first: {x: -3, y: 0, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: -2, y: 0, z: 0}
     second:
       serializedVersion: 2
@@ -67,14 +77,19 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 2eaad71a96ce94d42b99ab1a453f44c5, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: e49ffc38bc85ba8498eac4eccc3c814d, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: cb0ea99d3b17db5488c2fdb93a2b2206, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
     m_Data: {fileID: -3878557786174838139, guid: 6400fc9b5fc267c4990dd2b641bc1ac8,
       type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: 7d895f9af61bf6341af852cc4905584a, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 1050904697884852029, guid: 32ce617842b459b4397f97751d72ee72,
+      type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 2
+  - m_RefCount: 3
     m_Data:
       e00: 1
       e01: 0
@@ -93,15 +108,15 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 1
     m_Data: {r: 0.13725491, g: 0.023529414, b: 0.1137255, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -2, y: 0, z: 0}
-  m_Size: {x: 2, y: 1, z: 1}
+  m_Origin: {x: -3, y: 0, z: 0}
+  m_Size: {x: 3, y: 1, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -179,7 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8055907892909464045}
   - component: {fileID: 4654316463754429722}
-  m_Layer: 9
+  m_Layer: 31
   m_Name: New Palette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +228,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &2460900084440230177
+--- !u!114 &8914566234539751131
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

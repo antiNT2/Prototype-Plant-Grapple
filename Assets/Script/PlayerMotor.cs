@@ -12,6 +12,7 @@ public class PlayerMotor : MonoBehaviour
     public float jumpForce = 12f;
     public float moveForceGrapple = 1f;
     public float velocityThatIsConsideredStrong = 0.5f;
+    public float maxSlopeAngle = 25f;
     [SerializeField]
     SpriteRenderer playerRenderer;
 
@@ -25,6 +26,7 @@ public class PlayerMotor : MonoBehaviour
     public bool jumpButtonPressed { get; private set; }
     float initialGravity;
     CoyoteTimeStatuts coyoteTime;
+    Vector2 groundNormal;
     enum CoyoteTimeStatuts
     {
         Grounded,
@@ -267,7 +269,14 @@ public class PlayerMotor : MonoBehaviour
     {
         playerRigidbody.velocity = new Vector2(0f, playerRigidbody.velocity.y);
 
-        Vector2 movement = Vector2.right * speed * axis;
+        Vector2 direction = Vector2.right;
+
+        if (isGrounded && groundNormal != null)
+            direction = new Vector2(groundNormal.y, -groundNormal.x);
+
+        print(direction);
+
+        Vector2 movement = direction * speed * axis;
 
         if ((axis > 0 && !wallRight) || (axis < 0 && !wallLeft))
         {
@@ -309,22 +318,31 @@ public class PlayerMotor : MonoBehaviour
 
         if (groundHit1.collider != null)
         {
-            if (CollidedGroundIsValid(groundHit1.collider))
+            if (CollidedGroundIsValid(groundHit1.collider) && GroundAngleIsValid(groundHit1.normal))
+            {
+                groundNormal = groundHit1.normal;
                 checkGround = true;
+            }
             else
                 checkGround = false;
         }
         else if (groundHit2.collider != null)
         {
-            if (CollidedGroundIsValid(groundHit2.collider))
+            if (CollidedGroundIsValid(groundHit2.collider) && GroundAngleIsValid(groundHit2.normal))
+            {
+                groundNormal = groundHit2.normal;
                 checkGround = true;
+            }
             else
                 checkGround = false;
         }
         else if (groundHit3.collider != null)
         {
-            if (CollidedGroundIsValid(groundHit3.collider))
+            if (CollidedGroundIsValid(groundHit3.collider) && GroundAngleIsValid(groundHit3.normal))
+            {
+                groundNormal = groundHit3.normal;
                 checkGround = true;
+            }
             else
                 checkGround = false;
         }
@@ -341,6 +359,12 @@ public class PlayerMotor : MonoBehaviour
         {
             playerRigidbody.gravityScale = initialGravity;
             coyoteTime = CoyoteTimeStatuts.Grounded;
+
+            playerRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
+        else
+        {
+            playerRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         isGrounded = checkGround;
@@ -360,6 +384,16 @@ public class PlayerMotor : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    bool GroundAngleIsValid(Vector2 collisionNormal)
+    {
+        float groundAngle = Mathf.Atan2(Mathf.Abs(collisionNormal.y), Mathf.Abs(collisionNormal.x)) * Mathf.Rad2Deg;
+
+        if (groundAngle < maxSlopeAngle)
+            return false;
+
+        return true;
     }
 
     void CheckWalls()
@@ -403,14 +437,14 @@ public class PlayerMotor : MonoBehaviour
 
     void MoveAwayFromWall(bool right, float wallDistance)
     {
-        if (right == false)
+       /* if (right == false)
         {
             transform.position = new Vector3(transform.position.x + (wallCheckDistance - wallDistance), transform.position.y, transform.position.z);
         }
         else
         {
             transform.position = new Vector3(transform.position.x - (wallCheckDistance - wallDistance), transform.position.y, transform.position.z);
-        }
+        }*/
     }
     #endregion
 

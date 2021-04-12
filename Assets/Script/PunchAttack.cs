@@ -199,12 +199,14 @@ public class PunchAttack : MonoBehaviour
     void SetRopePosition()
     {
         punchArmRope.positionCount = additionalStartPositions.Count + 2;
-        punchArmRope.SetPosition(0, (Vector2)punchParent.position);
+
+        punchArmRope.SetPosition(0, (Vector2)fistObject.transform.position);
         for (int i = 0; i < additionalStartPositions.Count; i++)
         {
             punchArmRope.SetPosition(i + 1, (Vector2)additionalStartPositions[i]);
         }
-        punchArmRope.SetPosition(additionalStartPositions.Count + 1, (Vector2)fistObject.transform.position);
+        punchArmRope.SetPosition(additionalStartPositions.Count + 1, (Vector2)punchParent.position);
+
 
         SetHitbox();
     }
