@@ -160,7 +160,10 @@ public class PlayerMotor : MonoBehaviour
     void SetAnimations()
     {
         playerAnimator.SetBool("Walk", totalMovement != 0);
-        playerAnimator.SetBool("Fall", isFalling);
+        if (isFalling)
+            playerAnimator.SetBool("Fall", true);
+        else if(isFalling == false && Mathf.Abs(playerRigidbody.velocity.y) < 0.1f)
+            playerAnimator.SetBool("Fall", false);
 
         /* if (isGrounded)
              playerAnimator.SetBool("Descend", false);*/
@@ -280,7 +283,7 @@ public class PlayerMotor : MonoBehaviour
         if (isGrounded && groundNormal != null)
             direction = new Vector2(groundNormal.y, -groundNormal.x);
 
-       // print(direction);
+        // print(direction);
 
         Vector2 movement = direction * speed * axis;
 

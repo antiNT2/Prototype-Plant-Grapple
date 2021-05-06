@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,8 @@ public class EnemyMotor : MonoBehaviour, IMotor
     bool onSlopeLeft;
     bool onSlopeRight;
     Vector2 groundNormal;
+
+    public Action OnCanNoLongerWalkInThatDirection;
 
     public DetectInfo rightWallDetection { get; private set; }
     public DetectInfo leftWallDetection { get; private set; }
@@ -80,20 +83,20 @@ public class EnemyMotor : MonoBehaviour, IMotor
 
         anim.SetBool("Walk", inputAxis != 0);
 
-/*#if UNITY_EDITOR
-        if (Keyboard.current.rightArrowKey.isPressed)
-            inputAxis = 1;
-        else if (Keyboard.current.leftArrowKey.isPressed)
-            inputAxis = -1;
-        else
-            inputAxis = 0;
+        /*#if UNITY_EDITOR
+                if (Keyboard.current.rightArrowKey.isPressed)
+                    inputAxis = 1;
+                else if (Keyboard.current.leftArrowKey.isPressed)
+                    inputAxis = -1;
+                else
+                    inputAxis = 0;
 
-        if (Keyboard.current.upArrowKey.isPressed)
-            Jump();
+                if (Keyboard.current.upArrowKey.isPressed)
+                    Jump();
 
-        if (Input.GetKeyDown(KeyCode.T))
-            SetKnockback(5f, true);
-#endif*/
+                if (Input.GetKeyDown(KeyCode.T))
+                    SetKnockback(5f, true);
+        #endif*/
 
         //print("Ground: " + isGrounded + "/ SlopeRight: " + onSlopeRight + "/ SlopeLeft: " + onSlopeLeft);
 
@@ -134,7 +137,7 @@ public class EnemyMotor : MonoBehaviour, IMotor
     /// Move this enemy in the direction specified in the bool
     /// </summary>
     /// <param name="right">True if we want to move right</param>
-    public void Move(float axis)
+    void Move(float axis)
     {
         bool right = inputAxis > 0;
 
@@ -168,7 +171,6 @@ public class EnemyMotor : MonoBehaviour, IMotor
         if (obstacleIsPresent == false)
         {
             this.transform.Translate(vectorDirection * speed * Time.deltaTime);
-            //anim.SetBool("Walk", true);
         }
         else if (obstacleIsPresent == true)
         {
@@ -176,9 +178,12 @@ public class EnemyMotor : MonoBehaviour, IMotor
             {
                 if (hasStartedJumping == false)
                     Jump();
-                //this.transform.Translate(new Vector2(direction, 0) * speed * Time.deltaTime);
                 this.transform.Translate(vectorDirection * speed * Time.deltaTime);
-                //anim.SetBool("Walk", true);
+            }
+            else
+            {
+                if (OnCanNoLongerWalkInThatDirection != null && hasStartedJumping == false)
+                    OnCanNoLongerWalkInThatDirection();
             }
         }
 
@@ -293,7 +298,7 @@ public class EnemyMotor : MonoBehaviour, IMotor
                 axis *= -1f;
         }
 
-       GetComponent<IMotor>().SetKnockback(axis);
+        GetComponent<IMotor>().SetKnockback(axis);
     }
 
     IEnumerator ReduceKnockbackRoutine()

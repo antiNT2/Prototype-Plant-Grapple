@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4293719750955724010}
   - component: {fileID: 1906245350}
   - component: {fileID: 1906245349}
+  - component: {fileID: 1022109694853373069}
   m_Layer: 13
   m_Name: ENEMY
   m_TagString: Untagged
@@ -101,7 +102,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.011181831}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -112,7 +113,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.51, y: 1}
+  m_Size: {x: 0.51, y: 0.97763634}
   m_EdgeRadius: 0
 --- !u!114 &4293719750955724011
 MonoBehaviour:
@@ -182,13 +183,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e988ce533266148b42f1dbe18b8637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showGizmos: 1
+  showGizmos: 0
   invertFlipX: 1
-  speed: 3
+  speed: 2
   isFalling: 0
   ground:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 4608
   groundCheckDistance: 0.79
   wallCheckDistance: 0.35
   radiusLeftRightDetector: 0.22
@@ -202,3 +203,15 @@ MonoBehaviour:
   autoJump: 1
   inputAxis: 0
   isWalking: 0
+--- !u!114 &1022109694853373069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4293719750955724007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c252c7d150449bf418a1e4b541856a02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
