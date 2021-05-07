@@ -10,6 +10,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public int health = 2;
 
+    bool isInInvicibiltyFrames;
+
     private void Start()
     {
         enemyRenderer = GetComponent<SpriteRenderer>();
@@ -17,6 +19,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     void IDamageable.Damage(int damageAmount, Vector2 knockbackDirection, float damageAngle)
     {
+        if (isInInvicibiltyFrames)
+            return;
+
         CustomFunctions.SpawnAttackExplosion(damageAngle, this.transform.position);
 
         if (GetComponent<IMotor>() != null)
@@ -42,8 +47,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         CustomFunctions.HitCameraShake();
         CustomFunctions.HitFreeze();
 
+        isInInvicibiltyFrames = true;
         enemyRenderer.material.SetFloat("_EnableWhite", 1);
         yield return new WaitForSeconds(0.1f);
         enemyRenderer.material.SetFloat("_EnableWhite", 0);
+        isInInvicibiltyFrames = false;
     }
 }

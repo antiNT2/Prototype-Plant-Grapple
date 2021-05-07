@@ -23,7 +23,7 @@ public class CustomFunctions : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) || (Gamepad.current != null && Gamepad.current.selectButton.wasPressedThisFrame))
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public static void CameraShake()
@@ -101,10 +101,10 @@ public class CustomFunctions : MonoBehaviour
         renderer.color = finalColor;
     }
 
-  /*  public static void HitBlink(SpriteRenderer characterBlinking, IDamageable characterDamaged)
-    {
-        instance.StartCoroutine(instance.HitBlinkRoutine(characterBlinking, characterDamaged));
-    }*/
+    /*  public static void HitBlink(SpriteRenderer characterBlinking, IDamageable characterDamaged)
+      {
+          instance.StartCoroutine(instance.HitBlinkRoutine(characterBlinking, characterDamaged));
+      }*/
 
     IEnumerator HitPause(float duration)
     {
@@ -116,31 +116,31 @@ public class CustomFunctions : MonoBehaviour
         }
     }
 
-   /* IEnumerator HitBlinkRoutine(SpriteRenderer characterBlinking, IDamageable characterDamaged)
-    {
-        characterDamaged.invincible = true;
+    /* IEnumerator HitBlinkRoutine(SpriteRenderer characterBlinking, IDamageable characterDamaged)
+     {
+         characterDamaged.invincible = true;
 
-        float timer = .8f;
-        while (timer > 0)
-        {
-            if (characterBlinking != null)
-            {
-                if (characterBlinking != null)
-                    characterBlinking.enabled = false;
-                yield return new WaitForSeconds(0.1f);
-                if (characterBlinking != null)
-                    characterBlinking.enabled = true;
-                yield return new WaitForSeconds(0.1f);
-            }
-            timer -= 0.2f;
-        }
+         float timer = .8f;
+         while (timer > 0)
+         {
+             if (characterBlinking != null)
+             {
+                 if (characterBlinking != null)
+                     characterBlinking.enabled = false;
+                 yield return new WaitForSeconds(0.1f);
+                 if (characterBlinking != null)
+                     characterBlinking.enabled = true;
+                 yield return new WaitForSeconds(0.1f);
+             }
+             timer -= 0.2f;
+         }
 
-        if (characterBlinking != null)
-            characterBlinking.enabled = true;
+         if (characterBlinking != null)
+             characterBlinking.enabled = true;
 
 
-        characterDamaged.invincible = false;
-    }*/
+         characterDamaged.invincible = false;
+     }*/
 
     public static void PlaySound(AudioClip soundToPlay, float volume = 0.5f, bool unscaledTime = false)
     {

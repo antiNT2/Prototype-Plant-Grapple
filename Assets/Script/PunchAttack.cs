@@ -261,6 +261,8 @@ public class PunchAttack : MonoBehaviour
     {
         if (focusedEnemy != null)
             enemyFocusDisplay.transform.position = focusedEnemy.transform.position;
+        else
+            enemyFocusDisplay.color = new Color(1, 1, 1, 0);
     }
 
     void StartFocusEnemy()
