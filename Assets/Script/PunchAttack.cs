@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PunchAttack : MonoBehaviour
 {
+    public static PunchAttack instance;
+
     [SerializeField]
     GameObject fistObject;
     [SerializeField]
@@ -19,6 +21,10 @@ public class PunchAttack : MonoBehaviour
     Collider2D fistHitbox;
     [SerializeField]
     AudioClip punchSound;
+    [SerializeField]
+    SpriteRenderer enemyFocusDisplay;
+    [SerializeField]
+    ClosestEnemyDetector closestEnemyDetector;
 
     [SerializeField]
     Animator punchAnimator;
@@ -36,6 +42,10 @@ public class PunchAttack : MonoBehaviour
     bool hasInflictedDamageWithThisPunch;
     List<Vector2> additionalStartPositions = new List<Vector2>();
 
+    [SerializeField]
+    public GameObject focusedEnemy;
+    public bool isFocusingEnemy { get; private set; }
+
     PunchStatuts currentPunchStatuts;
     public enum PunchStatuts
     {
@@ -44,6 +54,11 @@ public class PunchAttack : MonoBehaviour
         Travel,
         Impact,
         Retracting
+    }
+
+    private void Awake()
+    {
+        instance = this;
     }
 
     private void Start()
@@ -59,6 +74,9 @@ public class PunchAttack : MonoBehaviour
     private void Update()
     {
         SetRopePosition();
+        SetEnemyFocusDisplay();
+
+        #region PunchLogic
         if (currentPunchStatuts == PunchStatuts.None)
             punchParent.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
 
@@ -89,8 +107,17 @@ public class PunchAttack : MonoBehaviour
 
         if (currentPunchStatuts == PunchStatuts.Impact)
             CheckIfWantToTravelAgain();
+        #endregion
+
+        if (playerInput.actions.FindAction("FocusEnemy").triggered)
+            StartFocusEnemy();
+        else if (playerInput.actions.FindAction("FocusEnemy").phase != InputActionPhase.Started && isFocusingEnemy)
+            StopFocusEnemy();
+        if (isFocusingEnemy && focusedEnemy == null)
+            StopFocusEnemy();
     }
 
+    #region Punch Mechanic
     void StartPunch()
     {
         CustomFunctions.PlaySound(punchSound);
@@ -172,7 +199,7 @@ public class PunchAttack : MonoBehaviour
         {
             if (playerInput.actions.FindAction("Attack").phase == InputActionPhase.Started)
                 fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
-            
+
 
             if (additionalStartPositions.Count < 1 && deltaPunchOrientation > 25f /*&& (playerInput.actions.FindAction("Attack").phase != InputActionPhase.Started || retractDelayHasPassed)*/)
             {
@@ -213,6 +240,7 @@ public class PunchAttack : MonoBehaviour
 
         SetHitbox();
     }
+    #endregion
 
     IEnumerator FadeOutRoutine(SpriteRenderer renderer, float duration)
     {
@@ -227,5 +255,59 @@ public class PunchAttack : MonoBehaviour
             timer += Time.deltaTime / duration;
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    void SetEnemyFocusDisplay()
+    {
+        if (focusedEnemy != null)
+            enemyFocusDisplay.transform.position = focusedEnemy.transform.position;
+    }
+
+    void StartFocusEnemy()
+    {
+        if (isFocusingEnemy == false)
+        {
+            if (closestEnemyDetector.GetClosestEnemy() != null)
+            {
+                focusedEnemy = closestEnemyDetector.GetClosestEnemy();
+
+                Rect enemySpriteDimensions = focusedEnemy.GetComponentInChildren<SpriteRenderer>().sprite.rect;
+                Vector2 detectorSize = new Vector2((enemySpriteDimensions.width * 2) / 32, (enemySpriteDimensions.height * 2) / 32);
+                detectorSize *= focusedEnemy.transform.localScale;
+
+                //enemyFocusDisplay.size = detectorSize;
+                StopCoroutine("EnemyFocusSizeInterpolation");
+                StartCoroutine(EnemyFocusSizeInterpolation(detectorSize, 0.1f));
+                enemyFocusDisplay.color = Color.white;
+                isFocusingEnemy = true;
+            }
+        }
+    }
+
+    IEnumerator EnemyFocusSizeInterpolation(Vector2 targetSize, float duration)
+    {
+        Vector2 initialSize = targetSize * 2f;
+        Vector2 finalSize = targetSize;
+        float timer = 0;
+
+        enemyFocusDisplay.size = initialSize;
+
+        while (enemyFocusDisplay.size.magnitude > finalSize.magnitude)
+        {
+            enemyFocusDisplay.size = Vector2.Lerp(initialSize, finalSize, timer);
+            timer += Time.deltaTime / duration;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    void StopFocusEnemy()
+    {
+        //if(focusedEnemy != null)
+        //{
+        isFocusingEnemy = false;
+        focusedEnemy = null;
+        enemyFocusDisplay.color = new Color(1, 1, 1, 0);
+        //CustomFunctions.FadeOut(enemyFocusDisplay, 0.1f);
+        //}
     }
 }

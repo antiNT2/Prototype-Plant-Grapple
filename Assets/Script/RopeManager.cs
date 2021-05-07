@@ -146,13 +146,13 @@ public class RopeManager : MonoBehaviour
         {
             //if (!shouldStayAttachedToPoint)
             //{
-                if (playerInput.actions.FindAction("Grapple").triggered)
-                    currentState = RopeState.Retracting;
+            if (playerInput.actions.FindAction("Grapple").triggered)
+                currentState = RopeState.Retracting;
 
-                if (HasCollidedWhileFlying() && playerInput.actions.FindAction("Grapple").phase != InputActionPhase.Started)
-                {
-                    currentState = RopeState.Retracting;
-                }
+            if (HasCollidedWhileFlying() && playerInput.actions.FindAction("Grapple").phase != InputActionPhase.Started)
+            {
+                currentState = RopeState.Retracting;
+            }
             //}
             /*else
             {
@@ -207,6 +207,7 @@ public class RopeManager : MonoBehaviour
     {
         float angle = GetGrappleDirectionAngle();
         grappleDirectionIndicator.transform.localPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * grappleDirectionIndicatorRadius;
+        grappleDirectionIndicator.color = PunchAttack.instance.isFocusingEnemy ? Color.white : Color.black;
     }
 
     public float GetGrappleDirectionAngle()
@@ -303,19 +304,27 @@ public class RopeManager : MonoBehaviour
 
     Vector2 GetGrappleDirection()
     {
-        //playerInput.actions.FindAction("Move").ReadValue<Vector2>()
-        if (playerInput.currentControlScheme == "Gamepad")
+        if (PunchAttack.instance.isFocusingEnemy == false)
         {
-            Vector2 gamePadStickValue = playerInput.actions.FindAction("Move").ReadValue<Vector2>().normalized;
-            if (invertYAxis)
-                gamePadStickValue.y = -gamePadStickValue.y;
+            if (playerInput.currentControlScheme == "Gamepad")
+            {
+                Vector2 gamePadStickValue = playerInput.actions.FindAction("Move").ReadValue<Vector2>().normalized;
+                if (invertYAxis)
+                    gamePadStickValue.y = -gamePadStickValue.y;
 
-            if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
-                lastJoystickPos = gamePadStickValue;
-            return lastJoystickPos;
+                if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
+                    lastJoystickPos = gamePadStickValue;
+                return lastJoystickPos;
+            }
+            else
+                return (Camera.main.ScreenToWorldPoint(Input.mousePosition) - playerRigidbody.transform.position).normalized;
         }
-        else
-            return (Camera.main.ScreenToWorldPoint(Input.mousePosition) - playerRigidbody.transform.position).normalized;
+        else if (PunchAttack.instance.focusedEnemy != null)
+        {
+            return (PunchAttack.instance.focusedEnemy.transform.position - playerRigidbody.transform.position).normalized;
+        }
+
+        return Vector2.zero;
     }
 
     void PropulseToEndLocation()

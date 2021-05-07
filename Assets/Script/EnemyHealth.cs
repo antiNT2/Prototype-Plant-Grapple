@@ -6,8 +6,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 {
     SpriteRenderer enemyRenderer;
     [SerializeField]
-    GameObject explosionPrefab;
-    [SerializeField]
     AudioClip hitSound;
 
     public int health = 2;
@@ -19,7 +17,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     void IDamageable.Damage(int damageAmount, Vector2 knockbackDirection, float damageAngle)
     {
-        SpawnExplosion(damageAngle);
+        CustomFunctions.SpawnAttackExplosion(damageAngle, this.transform.position);
 
         if (GetComponent<IMotor>() != null)
             GetComponent<IMotor>().SetKnockback(knockbackDirection.x);
@@ -30,16 +28,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         health--;
 
         if (health <= 0)
-            Destroy(this.gameObject);
+            Die();
     }
 
-    void SpawnExplosion(float angle)
+    void Die()
     {
-        GameObject explosion = Instantiate(explosionPrefab);
-        explosion.transform.position = this.transform.position;
-        explosion.transform.rotation = Quaternion.Euler(0, 0, angle);
-        // explosion.GetComponent<SpriteRenderer>().flipX = knockbackDirection.x < 0;
-        Destroy(explosion, 0.4f);
+        CustomFunctions.SpawnDeathExplosion(this.transform.position);
+        Destroy(this.gameObject);
     }
 
     IEnumerator DamageRoutine()

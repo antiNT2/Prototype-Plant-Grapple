@@ -12,6 +12,8 @@ public class CustomFunctions : MonoBehaviour
     public static CustomFunctions instance;
     public CinemachineImpulseSource hitCameraShakeSource;
     public CinemachineImpulseSource grappleCameraShakeSource;
+    public GameObject attackExplosionPrefab;
+    public GameObject deathExplosionPrefab;
     static GameObject soundHolder;
 
     private void Awake()
@@ -43,6 +45,21 @@ public class CustomFunctions : MonoBehaviour
     {
         instance.StartCoroutine(instance.HitPause(duration));
         VibrateController(0.2f, 0.3f);
+    }
+
+    public static void SpawnAttackExplosion(float angle, Vector2 position)
+    {
+        GameObject explosion = Instantiate(instance.attackExplosionPrefab);
+        explosion.transform.position = position;
+        explosion.transform.rotation = Quaternion.Euler(0, 0, angle);
+        Destroy(explosion, 0.4f);
+    }
+
+    public static void SpawnDeathExplosion(Vector2 position)
+    {
+        GameObject explosion = Instantiate(instance.deathExplosionPrefab);
+        explosion.transform.position = position;
+        Destroy(explosion, 0.4f);
     }
 
     public static void VibrateController(float lowFrequency, float highFrequency)
@@ -81,6 +98,7 @@ public class CustomFunctions : MonoBehaviour
             timer += Time.deltaTime / duration;
             yield return new WaitForEndOfFrame();
         }
+        renderer.color = finalColor;
     }
 
   /*  public static void HitBlink(SpriteRenderer characterBlinking, IDamageable characterDamaged)
