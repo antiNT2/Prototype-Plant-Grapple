@@ -15,8 +15,8 @@ public class PunchAttack : MonoBehaviour
     Transform punchParent;
     [SerializeField]
     LineRenderer punchArmRope;
-    [SerializeField]
-    EdgeCollider2D hitbox;
+    /*[SerializeField]
+    EdgeCollider2D hitbox;*/
     [SerializeField]
     Collider2D fistHitbox;
     [SerializeField]
@@ -33,7 +33,6 @@ public class PunchAttack : MonoBehaviour
     public float impactDuration = 1f;
     public float travelSpeed = 15f;
     public float secondaryPunchPositionLength = 2.0f;
-    public bool instantTravel = true;
 
     Vector2 targetPosition;
     Coroutine fadeOutCoroutine;
@@ -95,7 +94,7 @@ public class PunchAttack : MonoBehaviour
             }
         }
 
-        if (currentPunchStatuts == PunchStatuts.Travel && instantTravel == false)
+        if (currentPunchStatuts == PunchStatuts.Travel)
         {
             fistObject.transform.position = Vector2.Lerp(fistObject.transform.position, targetPosition, Time.deltaTime * travelSpeed);
 
@@ -123,16 +122,13 @@ public class PunchAttack : MonoBehaviour
         CustomFunctions.PlaySound(punchSound);
 
         if (fadeOutCoroutine != null)
-            StopCoroutine(fadeOutCoroutine);
+            CustomFunctions.instance.StopCoroutine(fadeOutCoroutine);
         fistObject.GetComponent<SpriteRenderer>().color = Color.white;
 
         currentPunchStatuts = PunchStatuts.Windup;
         targetPosition = fistRange.transform.position;
         punchAnimator.Play("Windup");
-        if (instantTravel)
-            Invoke("ImpactPunch", windupTime);
-        else
-            Invoke("TravelPunch", windupTime);
+        Invoke("TravelPunch", windupTime);
 
         fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
         originalFistOrientation = fistObject.transform.rotation.eulerAngles.z;
@@ -140,20 +136,11 @@ public class PunchAttack : MonoBehaviour
 
     void ImpactPunch()
     {
-        if (instantTravel)
-            punchAnimator.Play("Impact");
+        punchAnimator.Play("Impact");
         CustomFunctions.CameraShake();
-
-        /* if (instantTravel)
-             SetHitbox();*/
-
-        //ToggleHitbox(true);
-
         currentPunchStatuts = PunchStatuts.Impact;
         fistObject.transform.parent = null;
-        //fistObject.transform.position = targetPosition;
-        //fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
-
+        ToggleHitbox(false);
         Invoke("Retract", impactDuration);
     }
 
@@ -166,16 +153,15 @@ public class PunchAttack : MonoBehaviour
         fistObject.transform.parent = null;
     }
 
-    void SetHitbox()
+    /*void SetHitbox()
     {
         List<Vector2> newPoints = new List<Vector2>() { punchParent.position, fistObject.transform.position };
 
         hitbox.SetPoints(newPoints);
-    }
+    }*/
 
     void ToggleHitbox(bool enable)
     {
-        hitbox.gameObject.SetActive(enable);
         fistHitbox.enabled = enable;
     }
 
@@ -223,7 +209,7 @@ public class PunchAttack : MonoBehaviour
         fistObject.transform.position = punchParent.position;
         fistObject.transform.parent = punchParent;
         hasInflictedDamageWithThisPunch = false;
-        fadeOutCoroutine = StartCoroutine(FadeOutRoutine(fistObject.GetComponent<SpriteRenderer>(), 0.2f));
+        fadeOutCoroutine = CustomFunctions.FadeOut(fistObject.GetComponent<SpriteRenderer>(), 0.2f);
     }
 
     void SetRopePosition()
@@ -236,26 +222,8 @@ public class PunchAttack : MonoBehaviour
             punchArmRope.SetPosition(i + 1, (Vector2)additionalStartPositions[i]);
         }
         punchArmRope.SetPosition(additionalStartPositions.Count + 1, (Vector2)punchParent.position);
-
-
-        SetHitbox();
     }
     #endregion
-
-    IEnumerator FadeOutRoutine(SpriteRenderer renderer, float duration)
-    {
-        Color initialColor = renderer.color;
-        Color finalColor = renderer.color;
-        finalColor.a = 0;
-        float timer = 0;
-
-        while (renderer.color.a > 0)
-        {
-            renderer.color = Color.Lerp(initialColor, finalColor, timer);
-            timer += Time.deltaTime / duration;
-            yield return new WaitForEndOfFrame();
-        }
-    }
 
     void SetEnemyFocusDisplay()
     {

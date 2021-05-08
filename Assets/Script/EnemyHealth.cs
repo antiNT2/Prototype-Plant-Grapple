@@ -10,7 +10,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public int health = 2;
 
-    bool isInInvicibiltyFrames;
+    bool isInInvincibilityFrames;
 
     private void Start()
     {
@@ -19,7 +19,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     void IDamageable.Damage(int damageAmount, Vector2 knockbackDirection, float damageAngle)
     {
-        if (isInInvicibiltyFrames)
+        if (isInInvincibilityFrames)
             return;
 
         CustomFunctions.SpawnAttackExplosion(damageAngle, this.transform.position);
@@ -47,10 +47,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         CustomFunctions.HitCameraShake();
         CustomFunctions.HitFreeze();
 
-        isInInvicibiltyFrames = true;
+        isInInvincibilityFrames = true;
         enemyRenderer.material.SetFloat("_EnableWhite", 1);
         yield return new WaitForSeconds(0.1f);
         enemyRenderer.material.SetFloat("_EnableWhite", 0);
-        isInInvicibiltyFrames = false;
+        isInInvincibilityFrames = false;
     }
 }

@@ -21,6 +21,11 @@ public class CustomFunctions : MonoBehaviour
         instance = this;
     }
 
+    private void Start()
+    {
+        Time.timeScale = 1f;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R) || (Gamepad.current != null && Gamepad.current.selectButton.wasPressedThisFrame))
@@ -71,9 +76,9 @@ public class CustomFunctions : MonoBehaviour
         }
     }
 
-    public static void FadeOut(SpriteRenderer renderer, float duration)
+    public static Coroutine FadeOut(SpriteRenderer renderer, float duration)
     {
-        instance.StartCoroutine(instance.FadeOutRoutine(renderer, duration));
+       return instance.StartCoroutine(instance.FadeOutRoutine(renderer, duration));
     }
 
     IEnumerator VibrationRoutine(float lowFrequency, float highFrequency)
