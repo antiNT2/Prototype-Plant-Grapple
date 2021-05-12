@@ -6,13 +6,21 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
+    public static PlayerHealth instance;
+
     public int healthPoints = 6;
+    public bool debugInvincible;
     public List<Image> healthPointsDisplay;
     [SerializeField]
     AudioClip getHitSound;
 
     bool isInInvincibilityFrames;
     SpriteRenderer playerRenderer;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -21,13 +29,13 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);
+       /* if (Input.GetKeyDown(KeyCode.Q))
+            GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);*/
     }
 
     void IDamageable.Damage(int damageAmount, Vector2 knockback, float damageAngle)
     {
-        if (isInInvincibilityFrames)
+        if (isInInvincibilityFrames || (debugInvincible && Application.isEditor))
             return;
 
         healthPoints -= damageAmount;

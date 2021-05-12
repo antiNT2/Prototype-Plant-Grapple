@@ -146,19 +146,11 @@ public class PunchAttack : MonoBehaviour
 
     void TravelPunch()
     {
-        /*SetHitbox();*/
         ToggleHitbox(true);
         punchAnimator.Play("Impact");
         currentPunchStatuts = PunchStatuts.Travel;
         fistObject.transform.parent = null;
     }
-
-    /*void SetHitbox()
-    {
-        List<Vector2> newPoints = new List<Vector2>() { punchParent.position, fistObject.transform.position };
-
-        hitbox.SetPoints(newPoints);
-    }*/
 
     void ToggleHitbox(bool enable)
     {
@@ -197,6 +189,7 @@ public class PunchAttack : MonoBehaviour
 
     void TravelAgain(Vector2 additionalStartPos, float angleDirection)
     {
+        ToggleHitbox(true);
         originalFistOrientation = fistObject.transform.rotation.eulerAngles.z;
         additionalStartPositions.Add(additionalStartPos);
         targetPosition = additionalStartPos + (new Vector2(Mathf.Cos(angleDirection * Mathf.Deg2Rad), Mathf.Sin(angleDirection * Mathf.Deg2Rad))) * (secondaryPunchPositionLength / additionalStartPositions.Count);

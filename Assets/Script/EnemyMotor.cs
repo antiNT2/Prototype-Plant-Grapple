@@ -26,13 +26,14 @@ public class EnemyMotor : MonoBehaviour, IMotor
     public bool preventsWalkingInHole;
     public bool preventFallingOneBlock;
     public bool autoJump = true;
+    public bool dontFlipSpriteAutomatically;
     float airSpeed;
     public bool isGrounded { get; private set; }
     public float inputAxis;
     bool hasStartedJumping;
     float knockbackAxis;
     float totalMovement;
-    public bool isWalking;
+    //public bool isWalking;
     bool startDamageWall; //when enemy is stuck inside a wall
 
     bool onSlopeLeft;
@@ -68,8 +69,6 @@ public class EnemyMotor : MonoBehaviour, IMotor
 
         DetectRightObstacle();
         DetectLeftObstacle();
-        /*DetectLeftHole();
-        DetectRightHole();*/
 
         if (onSlopeLeft || onSlopeRight)
         {
@@ -83,28 +82,38 @@ public class EnemyMotor : MonoBehaviour, IMotor
 
         anim.SetBool("Walk", inputAxis != 0);
 
-        /*#if UNITY_EDITOR
-                if (Keyboard.current.rightArrowKey.isPressed)
-                    inputAxis = 1;
-                else if (Keyboard.current.leftArrowKey.isPressed)
-                    inputAxis = -1;
-                else
-                    inputAxis = 0;
+/*#if UNITY_EDITOR
+        if (Keyboard.current.rightArrowKey.isPressed)
+            inputAxis = 1;
+        else if (Keyboard.current.leftArrowKey.isPressed)
+            inputAxis = -1;
+        else
+            inputAxis = 0;
 
-                if (Keyboard.current.upArrowKey.isPressed)
-                    Jump();
+        if (Keyboard.current.upArrowKey.isPressed)
+            Jump();
 
-                if (Input.GetKeyDown(KeyCode.T))
-                    SetKnockback(5f, true);
-        #endif*/
+        if (Input.GetKeyDown(KeyCode.T))
+            SetKnockback(5f, true);
 
-        //print("Ground: " + isGrounded + "/ SlopeRight: " + onSlopeRight + "/ SlopeLeft: " + onSlopeLeft);
+        if (showGizmos)
+        {
+            DetectLeftHole();
+            DetectRightHole();
+        }
+#endif*/
 
         totalMovement = inputAxis;
         totalMovement += knockbackAxis;
 
         if (totalMovement != 0)
+        {
+            print(gameObject.name);
             Move(totalMovement);
+        }
+        //print("Ground: " + isGrounded + "/ SlopeRight: " + onSlopeRight + "/ SlopeLeft: " + onSlopeLeft);
+
+
     }
 
     private void LateUpdate()
@@ -187,7 +196,7 @@ public class EnemyMotor : MonoBehaviour, IMotor
             }
         }
 
-        if (inputAxis != 0)
+        if (inputAxis != 0 && dontFlipSpriteAutomatically == false)
         {
             if (!right)
                 spriteRenderer.flipX = invertFlipX;

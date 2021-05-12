@@ -10,7 +10,7 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: 25a63327f814cd04cbdbd7e8ae6dfcf9, type: 3}
   textureSettings:
     textureType: 8
-    pixelsPerUnit: 16
+    pixelsPerUnit: 32
     mirror: 0
     transparentMask: 0
     transparentColor: {r: 1, g: 0, b: 1, a: 1}
@@ -30,6 +30,12 @@ ScriptedImporter:
   - animationName: Walk Attack
     loopTime: 1
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 4; To: 7"
+  - animationName: Idle
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 8; To: 11"
+  - animationName: Idle Attack
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 12; To: 15"
   atlas: {instanceID: 0}
   importType: 0
   bindType: 0
