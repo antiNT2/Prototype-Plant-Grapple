@@ -35,7 +35,7 @@ ScriptedImporter:
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 8; To: 11"
   - animationName: Idle Attack
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 12; To: 15"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 12; To: 16"
   atlas: {instanceID: 0}
   importType: 0
   bindType: 0

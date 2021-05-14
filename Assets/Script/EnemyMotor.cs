@@ -108,7 +108,6 @@ public class EnemyMotor : MonoBehaviour, IMotor
 
         if (totalMovement != 0)
         {
-            print(gameObject.name);
             Move(totalMovement);
         }
         //print("Ground: " + isGrounded + "/ SlopeRight: " + onSlopeRight + "/ SlopeLeft: " + onSlopeLeft);

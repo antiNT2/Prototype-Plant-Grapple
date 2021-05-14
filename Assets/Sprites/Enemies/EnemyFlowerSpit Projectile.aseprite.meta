@@ -29,7 +29,7 @@ ScriptedImporter:
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 0; To: 1"
   - animationName: explode
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 5"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 7"
   atlas: {instanceID: 0}
   importType: 0
   bindType: 0

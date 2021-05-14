@@ -20,19 +20,19 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 5673895927365897347, guid: 695e8420c2533354e93a6cd3d67f69a5,
-        type: 3}
-    - time: 0.1
       value: {fileID: 5101971675552089636, guid: 695e8420c2533354e93a6cd3d67f69a5,
         type: 3}
-    - time: 0.23333333
+    - time: 0.1
       value: {fileID: -6077633825987728975, guid: 695e8420c2533354e93a6cd3d67f69a5,
         type: 3}
-    - time: 0.38333333
+    - time: 0.2
       value: {fileID: -3856262234380696822, guid: 695e8420c2533354e93a6cd3d67f69a5,
         type: 3}
-    - time: 0.48333332
-      value: {fileID: -3856262234380696822, guid: 695e8420c2533354e93a6cd3d67f69a5,
+    - time: 0.3
+      value: {fileID: 262957762612496553, guid: 695e8420c2533354e93a6cd3d67f69a5,
+        type: 3}
+    - time: 0.36666667
+      value: {fileID: 262957762612496553, guid: 695e8420c2533354e93a6cd3d67f69a5,
         type: 3}
     attribute: m_Sprite
     path: 
@@ -53,17 +53,17 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 5673895927365897347, guid: 695e8420c2533354e93a6cd3d67f69a5, type: 3}
     - {fileID: 5101971675552089636, guid: 695e8420c2533354e93a6cd3d67f69a5, type: 3}
     - {fileID: -6077633825987728975, guid: 695e8420c2533354e93a6cd3d67f69a5, type: 3}
     - {fileID: -3856262234380696822, guid: 695e8420c2533354e93a6cd3d67f69a5, type: 3}
-    - {fileID: -3856262234380696822, guid: 695e8420c2533354e93a6cd3d67f69a5, type: 3}
+    - {fileID: 262957762612496553, guid: 695e8420c2533354e93a6cd3d67f69a5, type: 3}
+    - {fileID: 262957762612496553, guid: 695e8420c2533354e93a6cd3d67f69a5, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5
+    m_StopTime: 0.38333336
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -83,7 +83,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.38333333
+  - time: 0.2
     functionName: SpawnProjectile
     data: 
     objectReferenceParameter: {fileID: 0}

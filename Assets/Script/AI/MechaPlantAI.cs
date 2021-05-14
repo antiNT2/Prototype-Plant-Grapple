@@ -12,7 +12,13 @@ public class MechaPlantAI : MonoBehaviour
     [SerializeField]
     GameObject projectilePrefab;
     [SerializeField]
+    GameObject spitParticlesPrefab;
+    [SerializeField]
     Transform projectileParent;
+    [SerializeField]
+    AudioClip spitSound;
+    [SerializeField]
+    AudioSource walkAudioSource;
     EnemyMotor enemyMotor;
     SpriteRenderer spriteRenderer;
 
@@ -52,7 +58,7 @@ public class MechaPlantAI : MonoBehaviour
         if (currentTargetDistance >= ignoreTargetDistance)
         {
             currentState = AIState.Idle;
-            enemyMotor.inputAxis = 0;
+            StopMoving();
         }
         if (currentTargetDistance < ignoreTargetDistance && currentTargetDistance > preferedTargetDistance)
         {
@@ -86,7 +92,7 @@ public class MechaPlantAI : MonoBehaviour
         if (currentState != AIState.Attacking)
         {
             currentState = AIState.Attacking;
-            enemyMotor.inputAxis = 0;
+            StopMoving();
             StartCoroutine(SpitContinuously());
         }
     }
@@ -105,6 +111,18 @@ public class MechaPlantAI : MonoBehaviour
     void Flee()
     {
         enemyMotor.inputAxis = (target.position.x > transform.position.x) ? -1 : 1;
+
+        if (walkAudioSource.isPlaying == false && enemyMotor.isGrounded)
+            walkAudioSource.Play();
+        else
+            walkAudioSource.Pause();
+    }
+
+    void StopMoving()
+    {
+        enemyMotor.inputAxis = 0;
+        if (walkAudioSource.isPlaying)
+            walkAudioSource.Pause();
     }
 
     IEnumerator TryToEscape()
@@ -118,6 +136,12 @@ public class MechaPlantAI : MonoBehaviour
         {
             enemyMotor.inputAxis = axis;
             timer += Time.deltaTime;
+
+            if (walkAudioSource.isPlaying == false && enemyMotor.isGrounded)
+                walkAudioSource.Play();
+            else
+                walkAudioSource.Pause();
+
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
@@ -129,16 +153,30 @@ public class MechaPlantAI : MonoBehaviour
         anim.Play("Spit");
     }
 
+    void SpawnParticles()
+    {
+        GameObject spawnedParticles = Instantiate(spitParticlesPrefab, projectileParent);
+
+        spawnedParticles.transform.localPosition = Vector3.zero;
+        //spawnedParticles.transform.parent = null;
+        spawnedParticles.transform.rotation = Quaternion.Euler(0, (spriteRenderer.flipX ? 180 : 0), 0);
+
+        Destroy(spawnedParticles, 0.5f);
+    }
+
     #region Animator
     //Used by animator :
     public void SpawnProjectile()
     {
+        CustomFunctions.PlaySound(spitSound, 0.4f);
         projectileParent.transform.localPosition = new Vector3(Mathf.Abs(projectileParent.localPosition.x) * (spriteRenderer.flipX ? -1 : 1), projectileParent.localPosition.y);
 
         GameObject spawnedProjectile = Instantiate(projectilePrefab, projectileParent);
         spawnedProjectile.transform.localPosition = Vector3.zero;
         spawnedProjectile.transform.parent = null;
         spawnedProjectile.transform.rotation = Quaternion.Euler(0, (spriteRenderer.flipX ? 180 : 0), 0);
+
+        SpawnParticles();
     }
     #endregion
 
