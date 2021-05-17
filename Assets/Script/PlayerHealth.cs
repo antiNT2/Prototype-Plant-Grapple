@@ -29,13 +29,13 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     private void Update()
     {
-       /* if (Input.GetKeyDown(KeyCode.Q))
-            GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);*/
+        /* if (Input.GetKeyDown(KeyCode.Q))
+             GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);*/
     }
 
     void IDamageable.Damage(int damageAmount, Vector2 knockback, float damageAngle)
     {
-        if (isInInvincibilityFrames || (debugInvincible && Application.isEditor))
+        if (isInInvincibilityFrames || (debugInvincible && Application.isEditor) || healthPoints <= 0)
             return;
 
         healthPoints -= damageAmount;
@@ -44,11 +44,13 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         CustomFunctions.HitFreeze();
         CustomFunctions.PlaySound(getHitSound, 0.5f, true);
         StartCoroutine(DamageRoutine());
+        SetHealthPointsDisplay();
 
-        if (healthPoints > 0)
-            SetHealthPointsDisplay();
-        else
-            Die();
+        if (healthPoints <= 0)
+        {
+            CustomFunctions.SpawnDeathExplosion(this.transform.position);
+            Invoke("Die", 0.25f);
+        }
 
     }
 

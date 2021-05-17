@@ -70,14 +70,14 @@ public class PlayerMotor : MonoBehaviour
         CheckWalls();
         jumpButtonPressed = playerInput.actions.FindAction("Jump").phase == InputActionPhase.Started;
 
-        if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started)
+        if (playerInput.actions.FindAction("Move").phase == InputActionPhase.Started && CanMove())
         {
             SetCorrectRenderOrientation(playerInput.actions.FindAction("Move").ReadValue<Vector2>().x < 0f);
             if (startedAcceleratingInput == false)
                 StartCoroutine(AccelerateInput());
         }
 
-        if (playerInput.actions.FindAction("Jump").triggered && (isGrounded || coyoteTime == CoyoteTimeStatuts.StartedCounting))
+        if (playerInput.actions.FindAction("Jump").triggered && (isGrounded || coyoteTime == CoyoteTimeStatuts.StartedCounting) && CanMove())
         {
             coyoteTime = CoyoteTimeStatuts.Jumped;
             StartCoroutine(JumpRoutine());
@@ -102,7 +102,7 @@ public class PlayerMotor : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (totalMovement != 0)
+        if (totalMovement != 0 && CanMove())
         {
             if (ShouldUseForceMovement())
             {
@@ -155,6 +155,14 @@ public class PlayerMotor : MonoBehaviour
             playerRenderer.transform.rotation = Quaternion.identity;
 
         isLookingRight = !lookLeft;
+    }
+
+    bool CanMove()
+    {
+        if (PlayerHealth.instance.healthPoints <= 0)
+            return false;
+
+        return true;
     }
 
     void SetAnimations()

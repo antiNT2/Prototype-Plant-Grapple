@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HitboxContinuousTrigger : HitboxTrigger
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("not hitting");
-    }
+        print("not hitting (" + this.gameObject.name + ")");
+    }*/
 
     private void OnTriggerStay2D(Collider2D collision)
     {

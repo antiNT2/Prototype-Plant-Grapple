@@ -12,16 +12,16 @@ public class EnemyMotor : MonoBehaviour, IMotor
     //EnnemyHealth enemyHealth;
     public bool showGizmos;
     public bool invertFlipX = false;
-    public float speed = 1.1f;
+    public float speed = 2.5f;
     public bool isFalling;
     public LayerMask ground;
-    public float groundCheckDistance = 0.45f;
-    public float wallCheckDistance = 0.45f;
-    public float radiusLeftRightDetector = 0.1f;
-    public float heightCheck = 0.2f;
-    public float holeCheckYOffset = 0.3f;
-    public float jumpForce = 9f;
-    public float oneBlockSize = 2f;
+    public float groundCheckDistance = 0.79f;
+    public float wallCheckDistance = 0.35f;
+    public float radiusLeftRightDetector = 0.2f;
+    public float heightCheck = 1f;
+    public float holeCheckYOffset = 0.5f;
+    public float jumpForce = 7.5f;
+    public float oneBlockSize = 1f;
     public float maxSlopeAngle = 25f;
     public bool preventsWalkingInHole;
     public bool preventFallingOneBlock;
@@ -36,8 +36,8 @@ public class EnemyMotor : MonoBehaviour, IMotor
     //public bool isWalking;
     bool startDamageWall; //when enemy is stuck inside a wall
 
-    bool onSlopeLeft;
-    bool onSlopeRight;
+    public bool onSlopeLeft { get; private set; }
+    public bool onSlopeRight { get; private set; }
     Vector2 groundNormal;
 
     public Action OnCanNoLongerWalkInThatDirection;
@@ -67,8 +67,8 @@ public class EnemyMotor : MonoBehaviour, IMotor
         DetectSlope();
         DetectGround();
 
-        DetectRightObstacle();
-        DetectLeftObstacle();
+       /* DetectRightObstacle();
+        DetectLeftObstacle();*/
 
         if (onSlopeLeft || onSlopeRight)
         {
@@ -82,26 +82,27 @@ public class EnemyMotor : MonoBehaviour, IMotor
 
         anim.SetBool("Walk", inputAxis != 0);
 
-/*#if UNITY_EDITOR
-        if (Keyboard.current.rightArrowKey.isPressed)
-            inputAxis = 1;
-        else if (Keyboard.current.leftArrowKey.isPressed)
-            inputAxis = -1;
-        else
-            inputAxis = 0;
-
-        if (Keyboard.current.upArrowKey.isPressed)
-            Jump();
-
-        if (Input.GetKeyDown(KeyCode.T))
-            SetKnockback(5f, true);
-
+#if UNITY_EDITOR
         if (showGizmos)
         {
+            if (Keyboard.current.rightArrowKey.isPressed)
+                inputAxis = 1;
+            else if (Keyboard.current.leftArrowKey.isPressed)
+                inputAxis = -1;
+            else if (Keyboard.current.downArrowKey.isPressed)
+                inputAxis = 0;
+
+            if (Keyboard.current.upArrowKey.isPressed)
+                Jump();
+
+            if (Input.GetKeyDown(KeyCode.T))
+                SetKnockback(5f, true);
+
+
             DetectLeftHole();
             DetectRightHole();
         }
-#endif*/
+#endif
 
         totalMovement = inputAxis;
         totalMovement += knockbackAxis;
@@ -155,10 +156,12 @@ public class EnemyMotor : MonoBehaviour, IMotor
         if (right)
         {
             DetectRightHole();
+            DetectRightObstacle();
         }
         else
         {
             DetectLeftHole();
+            DetectLeftObstacle();
         }
 
         enemyRigidbody.velocity = new Vector2(0, enemyRigidbody.velocity.y);
@@ -607,7 +610,7 @@ public class EnemyMotor : MonoBehaviour, IMotor
         return false;
     }
 
-    bool GroundAngleIsValid(Vector2 collisionNormal)
+    public bool GroundAngleIsValid(Vector2 collisionNormal)
     {
         float groundAngle = Mathf.Atan2(Mathf.Abs(collisionNormal.y), Mathf.Abs(collisionNormal.x)) * Mathf.Rad2Deg;
 

@@ -52,9 +52,6 @@ public class MechaPlantAI : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            SpitAttack();
-
         if (currentTargetDistance >= ignoreTargetDistance)
         {
             currentState = AIState.Idle;
