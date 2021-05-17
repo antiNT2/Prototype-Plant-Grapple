@@ -125,7 +125,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 011589e27c3e7e04586051fe69d422ee, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -139,7 +139,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 5820243877179504236}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 011589e27c3e7e04586051fe69d422ee, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -178,9 +178,9 @@ MonoBehaviour:
   groundCheckDistance: 0.8
   wallCheckDistance: 0.35
   radiusLeftRightDetector: 0.22
-  heightCheck: 1.03
+  heightCheck: 0.8
   holeCheckYOffset: 0.55
-  jumpForce: 8.5
+  jumpForce: 8
   oneBlockSize: 1
   maxSlopeAngle: 25
   preventsWalkingInHole: 1
@@ -202,6 +202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundCheckDistance: 0.6
   delayBetweenJumps: 0.1
+  maxHoleDepth: 2.8
 --- !u!114 &5820243877179504244
 MonoBehaviour:
   m_ObjectHideFlags: 0

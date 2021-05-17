@@ -9,6 +9,7 @@ public class JumpingAI : MonoBehaviour
     Rigidbody2D enemyRigidbody;
     public float groundCheckDistance = 0.5f;
     public float delayBetweenJumps = 0.1f;
+    public float maxHoleDepth = 3f;
     State currentState;
     enum State
     {
@@ -24,6 +25,9 @@ public class JumpingAI : MonoBehaviour
     bool stayIdle;
     bool isGrounded;
 
+    float leftHoleDepth;
+    float rightHoleDepth;
+
     private void Start()
     {
         enemyMotor = GetComponent<EnemyMotor>();
@@ -36,18 +40,19 @@ public class JumpingAI : MonoBehaviour
 
     private void Update()
     {
-
+        CheckHoles();
         if (currentState == State.Midair)
         {
-            if (Mathf.Abs(this.transform.position.x - target.position.x) <= 0.1f)
+            if (Mathf.Abs(this.transform.position.x - target.position.x) <= 0.1f && this.transform.position.y >= target.position.y)
             {
                 desiredInputAxis = 0f;
                 enemyRigidbody.AddForce(Vector2.down * 30f, ForceMode2D.Force);
             }
 
-            enemyMotor.inputAxis = desiredInputAxis;
-            /*else
-                enemyMotor.inputAxis = 0f;*/
+            if (CanMove())
+                enemyMotor.inputAxis = desiredInputAxis;
+            else
+                enemyMotor.inputAxis = 0f;
         }
         else
             enemyMotor.inputAxis = 0f;
@@ -78,15 +83,15 @@ public class JumpingAI : MonoBehaviour
         anim.Play("PrepareJump");
     }
 
-   /* bool CanMove()
-    {
-        if (desiredInputAxis == 1f && enemyMotor.rightHoleDetection == EnemyMotor.DetectInfo.ThreeBlocks)
+    bool CanMove()
+    {      
+        if (desiredInputAxis == 1f && rightHoleDepth >= maxHoleDepth)
             return false;
-        if (desiredInputAxis == -1f && enemyMotor.leftHoleDetection == EnemyMotor.DetectInfo.ThreeBlocks)
+        if (desiredInputAxis == -1f && leftHoleDepth >= maxHoleDepth)
             return false;
 
         return true;
-    }*/
+    }
 
     IEnumerator CountMidairTime()
     {
@@ -121,10 +126,49 @@ public class JumpingAI : MonoBehaviour
 
         if (isGrounded == false)
         {
-            if (enemyMotor.onSlopeLeft || enemyMotor.onSlopeRight)
+            if (enemyMotor.onSlopeLeft || enemyMotor.onSlopeRight || leftHoleDepth < 0.05f || rightHoleDepth < 0.05f)
                 isGrounded = true;
         }
         //isGrounded = Mathf.Abs(enemyRigidbody.velocity.y) < 0.1f;
+    }
+
+    void CheckHoles()
+    {
+        /*Vector2 origin = new Vector2(transform.position.x - enemyMotor.radiusLeftRightDetector, transform.position.y - enemyMotor.holeCheckYOffset);
+        RaycastHit2D groundHit = Physics2D.Raycast(origin, Vector2.down);
+        Debug.DrawRay(origin, Vector2.down);
+
+        if (groundHit.collider != null)
+        {
+            if (groundHit.collider.isTrigger == false && enemyMotor.GroundAngleIsValid(groundHit.normal))
+            {
+                print(groundHit.distance);
+            }
+        }*/
+
+        RaycastHit2D[] holeLeftHit = Physics2D.RaycastAll(new Vector2(transform.position.x - enemyMotor.radiusLeftRightDetector, transform.position.y - enemyMotor.holeCheckYOffset), Vector2.down, 10f, enemyMotor.ground);
+        Debug.DrawLine(new Vector2(transform.position.x - enemyMotor.radiusLeftRightDetector, transform.position.y - enemyMotor.holeCheckYOffset), new Vector2(transform.position.x - enemyMotor.radiusLeftRightDetector, transform.position.y - enemyMotor.holeCheckYOffset - 10f), Color.red);
+
+        for (int i = 0; i < holeLeftHit.Length; i++)
+        {
+            if (holeLeftHit[i] && holeLeftHit[i].transform.gameObject != this.transform.gameObject)
+            {
+                leftHoleDepth = holeLeftHit[i].distance;
+                break;
+            }
+        }
+
+        RaycastHit2D[] holeRightHit = Physics2D.RaycastAll(new Vector2(transform.position.x + enemyMotor.radiusLeftRightDetector, transform.position.y - enemyMotor.holeCheckYOffset), Vector2.down, 10f, enemyMotor.ground);
+        Debug.DrawLine(new Vector2(transform.position.x + enemyMotor.radiusLeftRightDetector, transform.position.y - enemyMotor.holeCheckYOffset), new Vector2(transform.position.x + enemyMotor.radiusLeftRightDetector, transform.position.y - enemyMotor.holeCheckYOffset - 10f), Color.red);
+
+        for (int i = 0; i < holeRightHit.Length; i++)
+        {
+            if (holeRightHit[i] && holeRightHit[i].transform.gameObject != this.transform.gameObject)
+            {
+                rightHoleDepth = holeRightHit[i].distance;
+                break;
+            }
+        }
     }
 
     #region Animator Methods
