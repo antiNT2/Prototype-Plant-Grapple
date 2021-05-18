@@ -16,6 +16,8 @@ public class CustomFunctions : MonoBehaviour
     public GameObject deathExplosionPrefab;
     static GameObject soundHolder;
 
+    public List<CollectibleTile> allCollectibleTiles;
+
     private void Awake()
     {
         instance = this;
