@@ -30,7 +30,7 @@ public class PunchAttack : MonoBehaviour
     Animator punchAnimator;
 
     public float windupTime = 0.2f;
-    public float impactDuration = 1f;
+    public float impactDuration = 0.2f;
     public float travelSpeed = 15f;
     public float secondaryPunchPositionLength = 2.0f;
 
@@ -134,11 +134,16 @@ public class PunchAttack : MonoBehaviour
         originalFistOrientation = fistObject.transform.rotation.eulerAngles.z;
     }
 
-    void ImpactPunch()
+    public void ImpactPunch()
     {
-        punchAnimator.Play("Impact");
-        CustomFunctions.CameraShake();
+        if (currentPunchStatuts != PunchStatuts.Travel)
+            return;
+
         currentPunchStatuts = PunchStatuts.Impact;
+        punchAnimator.Play("Impact");
+        //iTween.ShakeScale(fistObject, Vector3.right * 0.3f, 0.2f);
+        iTween.PunchPosition(fistObject, Vector3.right * 0.5f, 0.3f);
+        CustomFunctions.CameraShake();
         fistObject.transform.parent = null;
         ToggleHitbox(false);
         Invoke("Retract", impactDuration);

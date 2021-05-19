@@ -47,6 +47,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         CustomFunctions.HitCameraShake();
         CustomFunctions.HitFreeze();
 
+        iTween.ShakeScale(enemyRenderer.gameObject, Vector2.left * 0.25f, 0.25f);
         isInInvincibilityFrames = true;
         enemyRenderer.material.SetFloat("_EnableWhite", 1);
         yield return new WaitForSeconds(0.1f);

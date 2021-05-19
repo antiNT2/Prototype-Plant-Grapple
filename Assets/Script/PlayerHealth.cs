@@ -11,11 +11,13 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public int healthPoints = 6;
     public bool debugInvincible;
     public List<Image> healthPointsDisplay;
+    RectTransform healthPointsParentDisplay;
     [SerializeField]
     AudioClip getHitSound;
 
     bool isInInvincibilityFrames;
     SpriteRenderer playerRenderer;
+    Vector2 initialHealthBarDisplayPos;
 
     private void Awake()
     {
@@ -25,12 +27,14 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private void Start()
     {
         playerRenderer = GetComponentInChildren<SpriteRenderer>();
+        healthPointsParentDisplay = healthPointsDisplay[0].transform.parent.gameObject.GetComponent<RectTransform>();
+        initialHealthBarDisplayPos = healthPointsParentDisplay.position;
     }
 
     private void Update()
     {
-        /* if (Input.GetKeyDown(KeyCode.Q))
-             GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);*/
+        if (Input.GetKeyDown(KeyCode.Q))
+            GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);
     }
 
     void IDamageable.Damage(int damageAmount, Vector2 knockback, float damageAngle)
@@ -43,9 +47,14 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         CustomFunctions.HitCameraShake();
         CustomFunctions.HitFreeze();
         CustomFunctions.PlaySound(getHitSound, 0.5f, true);
-        StartCoroutine(DamageRoutine());
         SetHealthPointsDisplay();
 
+        if ((Vector2)healthPointsParentDisplay.position != initialHealthBarDisplayPos)
+            iTween.Stop(healthPointsParentDisplay.gameObject);
+
+        healthPointsParentDisplay.localPosition = Vector2.zero;
+
+        StartCoroutine(DamageRoutine());
         if (healthPoints <= 0)
         {
             CustomFunctions.SpawnDeathExplosion(this.transform.position);
@@ -71,6 +80,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         isInInvincibilityFrames = true;
         int numberOfBlinks = 0;
+        iTween.PunchScale(healthPointsParentDisplay.gameObject, Vector2.one * 1.5f, 0.75f);
 
         while (numberOfBlinks < 4)
         {
@@ -82,6 +92,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
             numberOfBlinks++;
             yield return new WaitForSeconds(0.1f);
         }
+        iTween.MoveTo(healthPointsParentDisplay.gameObject, initialHealthBarDisplayPos, 1f);
 
         isInInvincibilityFrames = false;
     }

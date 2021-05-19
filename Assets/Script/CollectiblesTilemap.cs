@@ -19,7 +19,8 @@ public class CollectiblesTilemap : MonoBehaviour
             Vector3 playerPos = collision.transform.position;
             Vector3Int collidedCollectibleTilemapPosition = triggerTilemap.WorldToCell(playerPos);
 
-            CollectCollectible(collidedCollectibleTilemapPosition + Vector3Int.up);
+            if (triggerTilemap.layoutGrid.cellSize.y < 1f) //dirty bugfix :/
+                CollectCollectible(collidedCollectibleTilemapPosition + Vector3Int.up);
             CollectCollectible(collidedCollectibleTilemapPosition + Vector3Int.down);
             CollectCollectible(collidedCollectibleTilemapPosition);
         }
