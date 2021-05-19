@@ -15,7 +15,6 @@ public class OnTrigger : MonoBehaviour
     {
         if (ShouldInvoke(collision))
         {
-            print(collision.gameObject.name);
             triggerEnter.Invoke();
         }
     }

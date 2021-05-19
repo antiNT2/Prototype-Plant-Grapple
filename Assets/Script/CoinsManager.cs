@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class CoinsManager : MonoBehaviour
 {
@@ -22,42 +23,15 @@ public class CoinsManager : MonoBehaviour
         coinDisplayObject = coinAmountDisplay.transform.parent.GetComponent<RectTransform>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-            AddCoins(1);
-        //coinAmountDisplay.text = numberOfCoins.ToString();
-    }
-
     public void AddCoins(int amount)
     {
         numberOfCoins += amount;
 
-        iTween.ValueTo(gameObject, iTween.Hash(
-        "from", int.Parse(coinAmountDisplay.text),
-        "to", numberOfCoins,
-        "time", 0.05f * amount,
-        "onupdatetarget", gameObject,
-        "onupdate", "IncreaseCoinUpdateCallBack",
-        "easetype", iTween.EaseType.linear
-        )
-        );
-        StartCoroutine(ShakeCoinDisplay(amount));
-    }
+        DOTween.To(() => int.Parse(coinAmountDisplay.text), x => coinAmountDisplay.text = x.ToString(), numberOfCoins, 0.05f * amount);
 
-
-    void IncreaseCoinUpdateCallBack(int newValue)
-    {
-        coinAmountDisplay.text = newValue.ToString();
-        // Debug.Log(exampleInt);
-    }
-
-    IEnumerator ShakeCoinDisplay(int amount)
-    {
-        iTween.Stop(coinDisplayObject.gameObject, false);
+        coinDisplayObject.transform.DOKill();
         coinDisplayObject.localScale = Vector3.one;
-        yield return new WaitForSeconds(0.1f);
-        iTween.PunchScale(coinDisplayObject.gameObject, Vector3.one * 0.2f * Mathf.Clamp(amount, 1f, 4f), 0.25f);
-        yield break;
+        coinDisplayObject.transform.DOPunchScale(Vector3.one * 0.2f * Mathf.Clamp(amount, 1f, 4f), 0.25f, 10, 0.25f);
     }
+
 }

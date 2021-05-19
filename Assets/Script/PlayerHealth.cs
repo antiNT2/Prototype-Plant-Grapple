@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +29,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         playerRenderer = GetComponentInChildren<SpriteRenderer>();
         healthPointsParentDisplay = healthPointsDisplay[0].transform.parent.gameObject.GetComponent<RectTransform>();
-        initialHealthBarDisplayPos = healthPointsParentDisplay.position;
+        initialHealthBarDisplayPos = healthPointsParentDisplay.anchoredPosition;
     }
 
     private void Update()
@@ -50,7 +51,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         SetHealthPointsDisplay();
 
         if ((Vector2)healthPointsParentDisplay.position != initialHealthBarDisplayPos)
-            iTween.Stop(healthPointsParentDisplay.gameObject);
+            DOTween.Kill(healthPointsParentDisplay);
 
         healthPointsParentDisplay.localPosition = Vector2.zero;
 
@@ -80,7 +81,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         isInInvincibilityFrames = true;
         int numberOfBlinks = 0;
-        iTween.PunchScale(healthPointsParentDisplay.gameObject, Vector2.one * 1.5f, 0.75f);
+        healthPointsParentDisplay.DOPunchScale(Vector2.one, 0.75f, 10, 0.5f);
 
         while (numberOfBlinks < 4)
         {
@@ -92,13 +93,15 @@ public class PlayerHealth : MonoBehaviour, IDamageable
             numberOfBlinks++;
             yield return new WaitForSeconds(0.1f);
         }
-        iTween.MoveTo(healthPointsParentDisplay.gameObject, initialHealthBarDisplayPos, 1f);
+
+        healthPointsParentDisplay.DOAnchorPos(initialHealthBarDisplayPos, 0.5f).SetEase(Ease.InOutCubic);
 
         isInInvincibilityFrames = false;
     }
 
     void Die()
     {
+        DOTween.Clear(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

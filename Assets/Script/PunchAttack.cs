@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class PunchAttack : MonoBehaviour
 {
@@ -141,8 +142,14 @@ public class PunchAttack : MonoBehaviour
 
         currentPunchStatuts = PunchStatuts.Impact;
         punchAnimator.Play("Impact");
-        //iTween.ShakeScale(fistObject, Vector3.right * 0.3f, 0.2f);
-        iTween.PunchPosition(fistObject, Vector3.right * 0.5f, 0.3f);
+
+        if (additionalStartPositions.Count == 0)
+        {
+            Vector3 punch = RopeManager.instance.GetGrappleDirection() * 1.5f;
+            fistObject.transform.DOKill();
+            fistObject.transform.DOPunchPosition(punch, 0.3f, 10, 1);
+        }
+
         CustomFunctions.CameraShake();
         fistObject.transform.parent = null;
         ToggleHitbox(false);
@@ -169,6 +176,7 @@ public class PunchAttack : MonoBehaviour
         if (currentPunchStatuts != PunchStatuts.Impact)
             return;
 
+        fistObject.transform.DOKill();
         ToggleHitbox(false);
         additionalStartPositions.Clear();
         currentPunchStatuts = PunchStatuts.Retracting;
@@ -194,6 +202,7 @@ public class PunchAttack : MonoBehaviour
 
     void TravelAgain(Vector2 additionalStartPos, float angleDirection)
     {
+        fistObject.transform.DOKill();
         ToggleHitbox(true);
         originalFistOrientation = fistObject.transform.rotation.eulerAngles.z;
         additionalStartPositions.Add(additionalStartPos);

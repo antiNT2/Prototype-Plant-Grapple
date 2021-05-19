@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using Cinemachine;
 using UnityEngine.EventSystems;
 using System;
+using DG.Tweening;
 
 public class CustomFunctions : MonoBehaviour
 {
@@ -25,13 +26,16 @@ public class CustomFunctions : MonoBehaviour
 
     private void Start()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;       
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R) || (Gamepad.current != null && Gamepad.current.selectButton.wasPressedThisFrame))
+        {
+            DOTween.Clear(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     public static void CameraShake()
     {

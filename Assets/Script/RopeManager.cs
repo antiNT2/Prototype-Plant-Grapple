@@ -298,12 +298,11 @@ public class RopeManager : MonoBehaviour
     void LockOn()
     {
         currentState = RopeState.LockedOn;
-        iTween.ShakeScale(grappleDirectionIndicator.gameObject, Vector2.one * 0.5f, 0.25f);
         armEndObject.parent = endPos.transform;
         playerRigidbody.AddForce((endPos.transform.position - playerRigidbody.transform.position).normalized * initialPropulsionImpulse, ForceMode2D.Impulse);
     }
 
-    Vector2 GetGrappleDirection()
+    public Vector2 GetGrappleDirection()
     {
         if (PunchAttack.instance.isFocusingEnemy == false)
         {
