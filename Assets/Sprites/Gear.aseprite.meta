@@ -27,6 +27,9 @@ ScriptedImporter:
   - animationName: Glow
     loopTime: 1
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 0; To: 2"
+  - animationName: glow 2
+    loopTime: 1
+    about: "Animation Type:\tPingPong\r\nAnimation:\tFrom: 3; To: 5"
   atlas: {instanceID: 0}
   importType: 0
   bindType: 0

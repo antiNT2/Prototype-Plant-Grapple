@@ -205,6 +205,8 @@ public class RopeManager : MonoBehaviour
 
     void ShowGrappleDirectionIndicator()
     {
+        if (PauseManager.instance.isPaused)
+            return;
         float angle = GetGrappleDirectionAngle();
         grappleDirectionIndicator.transform.localPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * grappleDirectionIndicatorRadius;
         grappleDirectionIndicator.color = PunchAttack.instance.isFocusingEnemy ? Color.white : Color.black;

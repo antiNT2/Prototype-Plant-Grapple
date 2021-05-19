@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Gear
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: 3891269495536304776, guid: 49bc55705a47afe47aae1c3bf82b954f, type: 3}
-  - {fileID: 7067918514050784639, guid: 49bc55705a47afe47aae1c3bf82b954f, type: 3}
-  - {fileID: -7479048774944034907, guid: 49bc55705a47afe47aae1c3bf82b954f, type: 3}
-  m_MinSpeed: 8
-  m_MaxSpeed: 8
+  - {fileID: -4711828637313208618, guid: 49bc55705a47afe47aae1c3bf82b954f, type: 3}
+  - {fileID: -7136263708697848698, guid: 49bc55705a47afe47aae1c3bf82b954f, type: 3}
+  - {fileID: 1045834680578205748, guid: 49bc55705a47afe47aae1c3bf82b954f, type: 3}
+  - {fileID: -7136263708697848698, guid: 49bc55705a47afe47aae1c3bf82b954f, type: 3}
+  m_MinSpeed: 6
+  m_MaxSpeed: 6
   m_AnimationStartTime: 0
   m_AnimationStartFrame: 0
   m_TileColliderType: 2

@@ -32,11 +32,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         initialHealthBarDisplayPos = healthPointsParentDisplay.anchoredPosition;
     }
 
-    private void Update()
+   /* private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
             GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);
-    }
+    }*/
 
     void IDamageable.Damage(int damageAmount, Vector2 knockback, float damageAngle)
     {

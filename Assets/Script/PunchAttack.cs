@@ -16,8 +16,6 @@ public class PunchAttack : MonoBehaviour
     Transform punchParent;
     [SerializeField]
     LineRenderer punchArmRope;
-    /*[SerializeField]
-    EdgeCollider2D hitbox;*/
     [SerializeField]
     Collider2D fistHitbox;
     [SerializeField]
@@ -29,6 +27,8 @@ public class PunchAttack : MonoBehaviour
 
     [SerializeField]
     Animator punchAnimator;
+    [SerializeField]
+    GameObject punchImpactParticlesPrefab;
 
     public float windupTime = 0.2f;
     public float impactDuration = 0.2f;
@@ -77,10 +77,10 @@ public class PunchAttack : MonoBehaviour
         SetEnemyFocusDisplay();
 
         #region PunchLogic
-        if (currentPunchStatuts == PunchStatuts.None)
+        if (currentPunchStatuts == PunchStatuts.None && !PauseManager.instance.isPaused)
             punchParent.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
 
-        if (currentPunchStatuts == PunchStatuts.None && playerInput.actions.FindAction("Attack").triggered)
+        if (currentPunchStatuts == PunchStatuts.None && playerInput.actions.FindAction("Attack").triggered && CanPunch())
         {
             StartPunch();
         }
@@ -232,6 +232,14 @@ public class PunchAttack : MonoBehaviour
     }
     #endregion
 
+    bool CanPunch()
+    {
+        if (PauseManager.instance.isPaused)
+            return false;
+
+        return true;
+    }
+
     void SetEnemyFocusDisplay()
     {
         if (focusedEnemy != null)
@@ -286,5 +294,17 @@ public class PunchAttack : MonoBehaviour
         enemyFocusDisplay.color = new Color(1, 1, 1, 0);
         //CustomFunctions.FadeOut(enemyFocusDisplay, 0.1f);
         //}
+    }
+
+    public void SpawnPunchImpactParticles()
+    {
+        if (currentPunchStatuts != PunchStatuts.Travel)
+            return;
+
+        GameObject explosion = Instantiate(punchImpactParticlesPrefab, fistObject.transform);
+        explosion.transform.localPosition = Vector2.right * 0.5f;
+        explosion.transform.parent = null;
+        explosion.transform.rotation = fistObject.transform.rotation;
+        Destroy(explosion, 0.4f);
     }
 }

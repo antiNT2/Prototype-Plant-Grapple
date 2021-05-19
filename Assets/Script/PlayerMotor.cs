@@ -159,7 +159,7 @@ public class PlayerMotor : MonoBehaviour
 
     bool CanMove()
     {
-        if (PlayerHealth.instance.healthPoints <= 0)
+        if (PlayerHealth.instance.healthPoints <= 0 || PauseManager.instance.isPaused)
             return false;
 
         return true;
