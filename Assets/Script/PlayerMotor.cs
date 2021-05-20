@@ -335,7 +335,7 @@ public class PlayerMotor : MonoBehaviour
 
         if (groundHit1.collider != null)
         {
-            if (CollidedGroundIsValid(groundHit1.collider) && GroundAngleIsValid(groundHit1.normal))
+            if (CollidedGroundIsValid(groundHit1.collider, false) && GroundAngleIsValid(groundHit1.normal))
             {
                 groundNormal = groundHit1.normal;
                 checkGround = true;
@@ -345,7 +345,7 @@ public class PlayerMotor : MonoBehaviour
         }
         else if (groundHit2.collider != null)
         {
-            if (CollidedGroundIsValid(groundHit2.collider) && GroundAngleIsValid(groundHit2.normal))
+            if (CollidedGroundIsValid(groundHit2.collider, false) && GroundAngleIsValid(groundHit2.normal))
             {
                 groundNormal = groundHit2.normal;
                 checkGround = true;
@@ -355,7 +355,7 @@ public class PlayerMotor : MonoBehaviour
         }
         else if (groundHit3.collider != null)
         {
-            if (CollidedGroundIsValid(groundHit3.collider) && GroundAngleIsValid(groundHit3.normal))
+            if (CollidedGroundIsValid(groundHit3.collider, false) && GroundAngleIsValid(groundHit3.normal))
             {
                 groundNormal = groundHit3.normal;
                 checkGround = true;
@@ -389,8 +389,19 @@ public class PlayerMotor : MonoBehaviour
             StartCoroutine(CountCoyoteTime());
     }
 
-    bool CollidedGroundIsValid(Collider2D collider)
+    bool CollidedGroundIsValid(Collider2D collider, bool checkingWall)
     {
+        if (checkingWall)
+        {
+            if (collider.usedByEffector && collider.GetComponent<PlatformEffector2D>() != null)
+                return false;
+        }
+        else
+        {
+            if (playerRigidbody.velocity.y > 0.5f)
+                return false;
+        }
+
         if (collider.isTrigger == false && (RopeManager.instance.pullingObject == null || RopeManager.instance.pullingObject != collider.transform))
             return true;
         else
@@ -414,7 +425,7 @@ public class PlayerMotor : MonoBehaviour
         Debug.DrawLine(rayOrigin, (Vector3)rayOrigin + (Vector3)(Vector2.left * wallCheckDistance), Color.red);
         if (hitLeft.collider != null)
         {
-            if (CollidedGroundIsValid(hitLeft.collider))
+            if (CollidedGroundIsValid(hitLeft.collider, true))
                 wallLeft = true;
             else
                 wallLeft = false;
@@ -431,7 +442,7 @@ public class PlayerMotor : MonoBehaviour
         Debug.DrawLine(rayOrigin, (Vector3)rayOrigin + (Vector3)(Vector2.right * wallCheckDistance), Color.red);
         if (hitRight.collider != null)
         {
-            if (CollidedGroundIsValid(hitRight.collider))
+            if (CollidedGroundIsValid(hitRight.collider, true))
                 wallRight = true;
             else
                 wallRight = false;

@@ -21,7 +21,7 @@ public class LevelManager : MonoBehaviour
         if (mainSceneIsLoaded == false)
             SceneManager.LoadScene(mainScene, LoadSceneMode.Additive);
 
-        print("We're going to " + allLevels[levelIndex].levelName);
+        //print("We're going to " + allLevels[levelIndex].levelName);
         SceneManager.LoadScene(allLevels[levelIndex].levelScene, LoadSceneMode.Additive);
     }
 }

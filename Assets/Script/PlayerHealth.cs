@@ -46,7 +46,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         healthPoints -= damageAmount;
         healthPoints = Mathf.Clamp(healthPoints, 0, 99);
         CustomFunctions.HitCameraShake();
-        CustomFunctions.HitFreeze();
+        CustomFunctions.HitFreeze(0.2f);
         CustomFunctions.PlaySound(getHitSound, 0.5f, true);
         SetHealthPointsDisplay();
 
@@ -81,7 +81,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         isInInvincibilityFrames = true;
         int numberOfBlinks = 0;
-        healthPointsParentDisplay.DOPunchScale(Vector2.one, 0.75f, 10, 0.5f);
+        healthPointsParentDisplay.DOPunchScale(Vector2.one, 0.75f, 10, 0.5f).SetUpdate(UpdateType.Normal, true);
 
         while (numberOfBlinks < 4)
         {

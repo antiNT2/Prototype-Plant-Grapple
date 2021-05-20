@@ -21,6 +21,7 @@ public class PauseManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        LoadPosition();
     }
 
     private void Start()
@@ -32,6 +33,9 @@ public class PauseManager : MonoBehaviour
     {
         if (pauseAction.triggered)
             SetPause(!isPaused);
+
+        if (Input.GetKeyDown(KeyCode.Q))
+            LoadPosition();
     }
 
     public void SetPause(bool enable)
@@ -44,6 +48,29 @@ public class PauseManager : MonoBehaviour
 
     public void LoadTitleScreen()
     {
+        DeletePosition();
         SceneManager.LoadScene(titleScreenScene, LoadSceneMode.Single);
+    }
+
+    public void SavePosition()
+    {
+        PlayerPrefsX.SetVector3("SavedPos", playerInput.transform.position);
+        PlayerPrefs.Save();
+        //print("Saved");
+    }
+
+    public void DeletePosition()
+    {
+        PlayerPrefs.DeleteKey("SavedPos");
+        PlayerPrefs.Save();
+    }
+
+    void LoadPosition()
+    {
+        if (PlayerPrefs.HasKey("SavedPos"))
+        {
+            playerInput.transform.position = PlayerPrefsX.GetVector3("SavedPos");
+            //print("LOADED POSS");
+        }
     }
 }
