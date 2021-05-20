@@ -952,6 +952,7 @@ MonoBehaviour:
       type: 3}
     collectibleGetSound: {fileID: 8300000, guid: 96876237d446a2c4a880026434a8e73c,
       type: 3}
+  hitEnemySound: {fileID: 8300000, guid: cdeffc0dbcbd3584eb72f3594012cabf, type: 3}
 --- !u!114 &413962283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4254,7 +4255,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1847731198}
         m_TargetAssemblyTypeName: PunchAttack, Assembly-CSharp
         m_MethodName: ImpactPunch
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4281,7 +4282,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1847731198}
         m_TargetAssemblyTypeName: PunchAttack, Assembly-CSharp
         m_MethodName: ImpactPunch
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

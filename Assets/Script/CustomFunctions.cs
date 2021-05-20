@@ -19,6 +19,9 @@ public class CustomFunctions : MonoBehaviour
 
     public List<CollectibleTile> allCollectibleTiles;
 
+    [SerializeField]
+    public AudioClip hitEnemySound;
+
     private void Awake()
     {
         instance = this;

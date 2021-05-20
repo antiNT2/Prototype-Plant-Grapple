@@ -1,0 +1,35 @@
+fileFormatVersion: 2
+guid: 42b992372565bb4479d4bdfb87f7fb0d
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 25a63327f814cd04cbdbd7e8ae6dfcf9, type: 3}
+  textureSettings:
+    textureType: 8
+    pixelsPerUnit: 32
+    mirror: 0
+    transparentMask: 1
+    transparentColor: {r: 0.5294118, g: 0.5568628, b: 0.654902, a: 1}
+    meshType: 1
+    extrudeEdges: 1
+    spritePivot: {x: 0.5, y: 0.5}
+    generatePhysics: 1
+    wrapMode: 1
+    filterMode: 0
+    tileSize: {x: 32, y: 32}
+    tilePadding: {x: 0, y: 0}
+    tileOffset: {x: 0, y: 0}
+  animationSettings:
+  - animationName: fly
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 0; To: 3"
+  - animationName: patrolling
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 4; To: 7"
+  atlas: {instanceID: 0}
+  importType: 0
+  bindType: 0

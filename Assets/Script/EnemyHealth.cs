@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     SpriteRenderer enemyRenderer;
-    [SerializeField]
-    AudioClip hitSound;
 
     public int health = 2;
+    public Action OnReceiveDamage;
 
     bool isInInvincibilityFrames;
 
@@ -30,11 +30,14 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         //GetComponent<Rigidbody2D>().AddForce(knockbackDirection, ForceMode2D.Impulse);
 
         StartCoroutine(DamageRoutine());
-        CustomFunctions.PlaySound(hitSound, 0.5f, true);
+        CustomFunctions.PlaySound(CustomFunctions.instance.hitEnemySound, 0.5f, true);
         health--;
 
         if (health <= 0)
             Die();
+
+        if (OnReceiveDamage != null)
+            OnReceiveDamage();
     }
 
     void Die()

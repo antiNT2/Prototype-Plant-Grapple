@@ -39,7 +39,7 @@ public class PunchAttack : MonoBehaviour
     Coroutine fadeOutCoroutine;
     PlayerInput playerInput;
     float originalFistOrientation;
-    bool hasInflictedDamageWithThisPunch;
+    bool isAllowedToTravelAgain;
     List<Vector2> additionalStartPositions = new List<Vector2>();
 
     [SerializeField]
@@ -67,8 +67,8 @@ public class PunchAttack : MonoBehaviour
         ResetPunch();
         playerInput = GetComponent<PlayerInput>();
 
-        fistHitbox.GetComponent<HitboxTrigger>().OnHit += (Collider2D) => ImpactPunch();
-        fistHitbox.GetComponent<HitboxTrigger>().OnHit += (Collider2D) => hasInflictedDamageWithThisPunch = true;
+        fistHitbox.GetComponent<HitboxTrigger>().OnHit += (Collider2D) => ImpactPunch(true);
+        fistHitbox.GetComponent<HitboxTrigger>().OnHit += (Collider2D) => isAllowedToTravelAgain = true;
     }
 
     private void Update()
@@ -101,7 +101,7 @@ public class PunchAttack : MonoBehaviour
 
             if (Vector2.Distance(fistObject.transform.position, targetPosition) < 0.1f)
             {
-                ImpactPunch();
+                ImpactPunch(false);
             }
         }
 
@@ -135,7 +135,7 @@ public class PunchAttack : MonoBehaviour
         originalFistOrientation = fistObject.transform.rotation.eulerAngles.z;
     }
 
-    public void ImpactPunch()
+    public void ImpactPunch(bool hasHitEnemy)
     {
         if (currentPunchStatuts != PunchStatuts.Travel)
             return;
@@ -150,7 +150,12 @@ public class PunchAttack : MonoBehaviour
             fistObject.transform.DOPunchPosition(punch, 0.3f, 10, 1);
         }
 
-        CustomFunctions.CameraShake();
+        if (hasHitEnemy)
+        {
+            CustomFunctions.CameraShake();
+        }
+
+
         fistObject.transform.parent = null;
         ToggleHitbox(false);
         Invoke("Retract", impactDuration);
@@ -186,7 +191,7 @@ public class PunchAttack : MonoBehaviour
     {
         float deltaPunchOrientation = Mathf.Abs(fistObject.transform.rotation.eulerAngles.z - originalFistOrientation);
 
-        if (currentPunchStatuts == PunchStatuts.Impact && additionalStartPositions.Count < 1 && hasInflictedDamageWithThisPunch == false)
+        if (currentPunchStatuts == PunchStatuts.Impact && additionalStartPositions.Count < 1 && isAllowedToTravelAgain == false)
         {
             if (playerInput.actions.FindAction("Attack").phase == InputActionPhase.Started)
                 fistObject.transform.rotation = Quaternion.Euler(0, 0, RopeManager.instance.GetGrappleDirectionAngle() * Mathf.Rad2Deg);
@@ -215,7 +220,7 @@ public class PunchAttack : MonoBehaviour
         currentPunchStatuts = PunchStatuts.None;
         fistObject.transform.position = punchParent.position;
         fistObject.transform.parent = punchParent;
-        hasInflictedDamageWithThisPunch = false;
+        isAllowedToTravelAgain = false;
         fadeOutCoroutine = CustomFunctions.FadeOut(fistObject.GetComponent<SpriteRenderer>(), 0.2f);
     }
 
@@ -306,5 +311,8 @@ public class PunchAttack : MonoBehaviour
         explosion.transform.parent = null;
         explosion.transform.rotation = fistObject.transform.rotation;
         Destroy(explosion, 0.4f);
+
+        CustomFunctions.CameraShake();
+        isAllowedToTravelAgain = false;
     }
 }
