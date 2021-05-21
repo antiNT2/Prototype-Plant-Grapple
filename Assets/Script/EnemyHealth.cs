@@ -42,8 +42,20 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     void Die()
     {
+        SpawnRandomAmountOfCoins();
         CustomFunctions.SpawnDeathExplosion(this.transform.position);
         Destroy(this.gameObject);
+    }
+
+    void SpawnRandomAmountOfCoins()
+    {
+        Vector3 coinPos = this.transform.position + Vector3.up * 0.5f;
+        int randomAmount = UnityEngine.Random.Range(1, 3);
+
+        for (int i = 0; i < randomAmount; i++)
+        {
+            CustomFunctions.SpawnCoin(coinPos + i * 0.25f * Vector3.right);
+        }
     }
 
     IEnumerator DamageRoutine()

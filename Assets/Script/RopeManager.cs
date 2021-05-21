@@ -250,7 +250,7 @@ public class RopeManager : MonoBehaviour
                 LockOn();
             }
 
-            CustomFunctions.CameraShake();
+            //CustomFunctions.CameraShake();
             CustomFunctions.HitFreeze(0.05f);
         }
         else if (currentState == RopeState.Failed)

@@ -21,6 +21,7 @@ public class CustomFunctions : MonoBehaviour
 
     [SerializeField]
     public AudioClip hitEnemySound;
+    public GameObject droppedCoinPrefab;
 
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class CustomFunctions : MonoBehaviour
 
     private void Start()
     {
-        Time.timeScale = 1f;       
+        Time.timeScale = 1f;
     }
 
     private void Update()
@@ -76,6 +77,16 @@ public class CustomFunctions : MonoBehaviour
         Destroy(explosion, 0.4f);
     }
 
+    public static void SpawnParticleEffects(Vector3 position, GameObject particlePrefab)
+    {
+        if (particlePrefab == null)
+            return;
+
+        GameObject spawnedEffect = Instantiate(particlePrefab);
+        spawnedEffect.transform.position = position;
+        Destroy(spawnedEffect, 0.4f);
+    }
+
     public static void VibrateController(float lowFrequency, float highFrequency)
     {
         if (Gamepad.current != null)
@@ -87,7 +98,16 @@ public class CustomFunctions : MonoBehaviour
 
     public static Coroutine FadeOut(SpriteRenderer renderer, float duration)
     {
-       return instance.StartCoroutine(instance.FadeOutRoutine(renderer, duration));
+        return instance.StartCoroutine(instance.FadeOutRoutine(renderer, duration));
+    }
+
+    public static void SpawnCoin(Vector3 position)
+    {
+        GameObject spawnedObject = Instantiate(instance.droppedCoinPrefab);
+        spawnedObject.transform.position = position;
+        OnTrigger coinTrigger = spawnedObject.GetComponent<OnTrigger>();
+        coinTrigger.triggerEnter.AddListener(() => instance.allCollectibleTiles[0].DoCollectEffect(spawnedObject.transform.position - Vector3.one * 0.25f));
+        coinTrigger.triggerEnter.AddListener(() => Destroy(spawnedObject));
     }
 
     IEnumerator VibrationRoutine(float lowFrequency, float highFrequency)

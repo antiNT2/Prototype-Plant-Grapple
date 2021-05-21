@@ -35,22 +35,9 @@ public class CollectiblesTilemap : MonoBehaviour
 
             if (tileToCollect != null)
             {
-                CoinsManager.instance.AddCoins(tileToCollect.coinGetAmount);
-                SpawnParticleEffects(position, tileToCollect.collectibleGetParticlesPrefab);
-                if (tileToCollect.collectibleGetSound != null)
-                    CustomFunctions.PlaySound(tileToCollect.collectibleGetSound);
+                tileToCollect.DoCollectEffect(triggerTilemap.CellToWorld(position));
             }
         }
-    }
-
-    void SpawnParticleEffects(Vector3Int position, GameObject particlePrefab)
-    {
-        if (particlePrefab == null)
-            return;
-
-        GameObject spawnedEffect = Instantiate(particlePrefab);
-        spawnedEffect.transform.position = triggerTilemap.CellToWorld(position);
-        Destroy(spawnedEffect, 0.4f);
     }
 
     public CollectibleTile GetCollectibleTile(TileBase _tile)
@@ -72,4 +59,12 @@ public class CollectibleTile
     public int coinGetAmount;
     public GameObject collectibleGetParticlesPrefab;
     public AudioClip collectibleGetSound;
+
+    public void DoCollectEffect(Vector3 position)
+    {
+        CoinsManager.instance.AddCoins(this.coinGetAmount);
+        CustomFunctions.SpawnParticleEffects(position, this.collectibleGetParticlesPrefab);
+        if (this.collectibleGetSound != null)
+            CustomFunctions.PlaySound(this.collectibleGetSound);
+    }
 }

@@ -33,9 +33,6 @@ public class PauseManager : MonoBehaviour
     {
         if (pauseAction.triggered)
             SetPause(!isPaused);
-
-        if (Input.GetKeyDown(KeyCode.Q))
-            LoadPosition();
     }
 
     public void SetPause(bool enable)

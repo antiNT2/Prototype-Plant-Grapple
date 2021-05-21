@@ -143,7 +143,7 @@ public class PunchAttack : MonoBehaviour
         currentPunchStatuts = PunchStatuts.Impact;
         punchAnimator.Play("Impact");
 
-        if (additionalStartPositions.Count == 0)
+        if (additionalStartPositions.Count == 0 && hasHitEnemy == false)
         {
             Vector3 punch = RopeManager.instance.GetGrappleDirection() * 1.5f;
             fistObject.transform.DOKill();

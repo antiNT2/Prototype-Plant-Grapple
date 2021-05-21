@@ -30,7 +30,6 @@ public class HiddenTilemap : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        print("jaaj");
         if (collision.tag == "Player")
         {
             if (firstTileHiddenPosition != Vector3Int.zero)
