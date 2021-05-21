@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class RopeManager : MonoBehaviour
 {
@@ -54,6 +55,8 @@ public class RopeManager : MonoBehaviour
     bool shouldStayAttachedToPoint;
     Vector2 lastJoystickPos;
     Transform lastGrapplePoint;
+    (Vector2, Transform) lastDetectedGrapplePointDisplayFocus;
+    Sequence grapplePointMoveSequence;
     public Transform pullingObject { get; private set; }
     bool invertYAxis = false;
 
@@ -192,14 +195,23 @@ public class RopeManager : MonoBehaviour
     {
         (Vector2, Transform) detectedGrapplePoint = DetectWallToGrapple(GetGrappleDirection());
 
-        if (detectedGrapplePoint.Item2 != null)
+        if (detectedGrapplePoint.Item2 != null && (lastDetectedGrapplePointDisplayFocus != detectedGrapplePoint || grappleIndicator.gameObject.activeSelf == false))
         {
             grappleIndicator.gameObject.SetActive(true);
+            lastDetectedGrapplePointDisplayFocus = detectedGrapplePoint;
+
+            grapplePointMoveSequence.Kill();
+            grappleIndicator.transform.localScale = Vector3.one;
+            //grappleIndicator.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f);
+
             grappleIndicator.transform.position = detectedGrapplePoint.Item1;
+            grapplePointMoveSequence = DOTween.Sequence()/*.Append(grappleIndicator.transform.DOMove(detectedGrapplePoint.Item1, 0.1f))*/.Append(grappleIndicator.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f));
+            //mySequence.pl
         }
-        else
+        else if (detectedGrapplePoint.Item2 == null && grappleIndicator.activeSelf == true)
         {
             grappleIndicator.gameObject.SetActive(false);
+            //grappleIndicator.transform.DOScale(0f, 0.1f).OnComplete(() => grappleIndicator.gameObject.SetActive(false));
         }
     }
 
