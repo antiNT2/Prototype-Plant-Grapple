@@ -7,6 +7,13 @@ public class TitleScreenManager : MonoBehaviour
 {
     [SerializeField]
     SceneField levelManager;
+
+    private void Start()
+    {
+        PlayerPrefs.DeleteKey("SavedPos");
+        PlayerPrefs.Save();
+    }
+
     public void LoadLevelButton(int levelId)
     {
         PlayerPrefs.SetInt("LevelToLoad", levelId);

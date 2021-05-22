@@ -43,6 +43,7 @@ public class JumpingAI : MonoBehaviour
         CheckHoles();
         if (currentState == State.Midair)
         {
+            //If we're just above the player
             if (Mathf.Abs(this.transform.position.x - target.position.x) <= 0.1f && this.transform.position.y >= target.position.y)
             {
                 desiredInputAxis = 0f;

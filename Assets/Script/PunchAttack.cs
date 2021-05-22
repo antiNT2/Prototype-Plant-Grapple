@@ -29,6 +29,8 @@ public class PunchAttack : MonoBehaviour
     Animator punchAnimator;
     [SerializeField]
     GameObject punchImpactParticlesPrefab;
+    [SerializeField]
+    AudioClip punchImpactSound;
 
     public float windupTime = 0.2f;
     public float impactDuration = 0.2f;
@@ -152,7 +154,7 @@ public class PunchAttack : MonoBehaviour
 
         if (hasHitEnemy)
         {
-            CustomFunctions.CameraShake();
+            //CustomFunctions.CameraShake();
         }
 
 
@@ -313,6 +315,7 @@ public class PunchAttack : MonoBehaviour
         Destroy(explosion, 0.4f);
 
         CustomFunctions.CameraShake();
+        CustomFunctions.PlaySound(punchImpactSound);
         isAllowedToTravelAgain = false;
     }
 }

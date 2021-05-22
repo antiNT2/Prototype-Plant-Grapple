@@ -606,6 +606,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1977257587}
   - {fileID: 728112436}
   - {fileID: 1699856633}
   m_Father: {fileID: 1847731193}
@@ -1060,9 +1061,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 10.803014, y: 10.769771, z: -3.7837398}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 855208170}
-  - {fileID: 425896681}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1098,8 +1097,10 @@ MonoBehaviour:
     collectibleGetSound: {fileID: 8300000, guid: 96876237d446a2c4a880026434a8e73c,
       type: 3}
   hitEnemySound: {fileID: 8300000, guid: cdeffc0dbcbd3584eb72f3594012cabf, type: 3}
+  explosionSound: {fileID: 8300000, guid: 1638d8c9b30a06e4bbf57b93b7174874, type: 3}
   droppedCoinPrefab: {fileID: 3399770166349781954, guid: 4411672ebc0b7554ba068c00c3baa2dc,
     type: 3}
+  playerCameraFollowPoint: {fileID: 1977257587}
 --- !u!114 &413962283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1145,8 +1146,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 413962281}
-  m_RootOrder: 1
+  m_Father: {fileID: 534669905}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &425896682
 MonoBehaviour:
@@ -1271,7 +1272,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.33, y: 1.9915999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 425896681}
+  - {fileID: 855208170}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1291,7 +1294,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 0
+  m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
@@ -2038,7 +2041,7 @@ Transform:
   m_Children:
   - {fileID: 21144139}
   m_Father: {fileID: 213810915}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &757520198
 GameObject:
@@ -2380,8 +2383,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 413962281}
-  m_RootOrder: 0
+  m_Father: {fileID: 534669905}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &855208171
 MonoBehaviour:
@@ -2398,8 +2401,8 @@ MonoBehaviour:
   m_ImpulseDefinition:
     m_ImpulseChannel: 1
     m_RawSignal: {fileID: 11400000, guid: 5720141c430980548b48c8a7828f5b9c, type: 2}
-    m_AmplitudeGain: 1
-    m_FrequencyGain: 1
+    m_AmplitudeGain: 0
+    m_FrequencyGain: 0
     m_RepeatMode: 0
     m_Randomize: 1
     m_TimeEnvelope:
@@ -2416,9 +2419,9 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_AttackTime: 0
-      m_SustainTime: 0
+      m_SustainTime: 0.2
       m_DecayTime: 0.7
-      m_ScaleWithImpact: 0
+      m_ScaleWithImpact: 1
       m_HoldForever: 0
     m_ImpactRadius: 100
     m_DirectionMode: 0
@@ -3393,7 +3396,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 1847731193}
+  m_Follow: {fileID: 1977257587}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 3.9
@@ -4190,7 +4193,7 @@ Transform:
   - {fileID: 2121464384}
   - {fileID: 601757527}
   m_Father: {fileID: 213810915}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1786159354
 GameObject:
@@ -4549,6 +4552,7 @@ MonoBehaviour:
   punchAnimator: {fileID: 601757528}
   punchImpactParticlesPrefab: {fileID: 779403943906782873, guid: 46351531eba7fe94496e92afa7304568,
     type: 3}
+  punchImpactSound: {fileID: 8300000, guid: 96c28a841237ed9449ab1d517d14436b, type: 3}
   windupTime: 0
   impactDuration: 0.2
   travelSpeed: 30
@@ -4724,6 +4728,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855514322}
   m_CullTransparentMesh: 1
+--- !u!1 &1977257586
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1977257587}
+  m_Layer: 11
+  m_Name: CameraFollowPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1977257587
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977257586}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 213810915}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2121464383
 GameObject:
   m_ObjectHideFlags: 0

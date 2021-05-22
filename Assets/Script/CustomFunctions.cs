@@ -21,7 +21,11 @@ public class CustomFunctions : MonoBehaviour
 
     [SerializeField]
     public AudioClip hitEnemySound;
+    [SerializeField]
+    AudioClip explosionSound;
     public GameObject droppedCoinPrefab;
+    [SerializeField]
+    Transform playerCameraFollowPoint;
 
     private void Awake()
     {
@@ -40,10 +44,16 @@ public class CustomFunctions : MonoBehaviour
             DOTween.Clear(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+            HitCameraShake();
     }
     public static void CameraShake()
     {
-        instance.grappleCameraShakeSource.GenerateImpulse();
+        //instance.grappleCameraShakeSource.GenerateImpulse();
+        instance.playerCameraFollowPoint.DOKill();
+        instance.playerCameraFollowPoint.localPosition = Vector3.zero;
+        instance.playerCameraFollowPoint.DOShakePosition(0.25f, 1, 100).SetUpdate(true);
     }
 
     public static void CameraShake(Vector2 velocity)
@@ -72,6 +82,7 @@ public class CustomFunctions : MonoBehaviour
 
     public static void SpawnDeathExplosion(Vector2 position)
     {
+        PlaySound(instance.explosionSound);
         GameObject explosion = Instantiate(instance.deathExplosionPrefab);
         explosion.transform.position = position;
         Destroy(explosion, 0.4f);
