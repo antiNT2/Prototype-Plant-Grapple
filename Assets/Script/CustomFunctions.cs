@@ -45,8 +45,8 @@ public class CustomFunctions : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-            HitCameraShake();
+      /*  if (Input.GetKeyDown(KeyCode.Q))
+            HitCameraShake();*/
     }
     public static void CameraShake()
     {

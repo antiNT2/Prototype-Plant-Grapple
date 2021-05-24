@@ -69,4 +69,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         enemyRenderer.material.SetFloat("_EnableWhite", 0);
         isInInvincibilityFrames = false;
     }
+
+    void IDamageable.Heal(int healAmount)
+    {
+        throw new NotImplementedException();
+    }
 }

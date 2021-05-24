@@ -32,11 +32,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         initialHealthBarDisplayPos = healthPointsParentDisplay.anchoredPosition;
     }
 
-   /* private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-            GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);
-    }*/
+    /* private void Update()
+     {
+         if (Input.GetKeyDown(KeyCode.Q))
+             GetComponent<IDamageable>().Damage(1, Vector2.zero, 0f);
+     }*/
 
     void IDamageable.Damage(int damageAmount, Vector2 knockback, float damageAngle)
     {
@@ -64,9 +64,26 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     }
 
+    void IDamageable.Heal(int healAmount)
+    {
+        if (healthPoints >= 3)
+            return;
+
+        healthPoints += healAmount;
+        healthPoints = Mathf.Clamp(healthPoints, 0, 99);
+        CustomFunctions.HitFreeze(0.2f);
+        SetHealthPointsDisplay();
+
+        if ((Vector2)healthPointsParentDisplay.position != initialHealthBarDisplayPos)
+            DOTween.Kill(healthPointsParentDisplay);
+
+        healthPointsParentDisplay.localPosition = Vector2.zero;
+        healthPointsParentDisplay.DOAnchorPos(initialHealthBarDisplayPos, 0.5f).SetEase(Ease.InOutCubic).SetDelay(.5f);
+    }
+
     void SetHealthPointsDisplay()
     {
-        foreach (var hP in healthPointsDisplay)
+        /*foreach (var hP in healthPointsDisplay)
         {
             hP.gameObject.SetActive(true);
         }
@@ -74,6 +91,14 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         for (int i = healthPoints; i < healthPointsDisplay.Count; i++)
         {
             healthPointsDisplay[i].gameObject.SetActive(false);
+        }*/
+
+        for (int i = 0; i < healthPointsDisplay.Count; i++)
+        {
+            if (i >= healthPoints && healthPointsDisplay[i].gameObject.activeSelf == true)
+                healthPointsDisplay[i].gameObject.SetActive(false);
+            else if (i < healthPoints && healthPointsDisplay[i].gameObject.activeSelf == false)
+                healthPointsDisplay[i].gameObject.SetActive(true);
         }
     }
 
