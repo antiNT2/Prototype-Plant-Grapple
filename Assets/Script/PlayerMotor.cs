@@ -144,7 +144,7 @@ public class PlayerMotor : MonoBehaviour
 
     void NerfHorizontalVelocity()
     {
-        playerRigidbody.velocity = Vector2.Lerp(playerRigidbody.velocity, new Vector2(0f, playerRigidbody.velocity.y), Time.fixedDeltaTime * 3f);
+        playerRigidbody.velocity = Vector2.Lerp(playerRigidbody.velocity, new Vector2(0f, playerRigidbody.velocity.y), Time.fixedDeltaTime * 2f);
     }
 
     public void SetCorrectRenderOrientation(bool lookLeft)
@@ -170,7 +170,7 @@ public class PlayerMotor : MonoBehaviour
         playerAnimator.SetBool("Walk", totalMovement != 0);
         if (isFalling)
             playerAnimator.SetBool("Fall", true);
-        else if(isFalling == false && Mathf.Abs(playerRigidbody.velocity.y) < 0.1f)
+        else if (isFalling == false && Mathf.Abs(playerRigidbody.velocity.y) < 0.1f)
             playerAnimator.SetBool("Fall", false);
 
         /* if (isGrounded)
@@ -312,8 +312,8 @@ public class PlayerMotor : MonoBehaviour
 
     void GrappleMove(float axis)
     {
-        playerRigidbody.AddForce(Vector2.right * axis * moveForceGrapple);
-        //Debug.Log("GrappleMOve");
+       // if (AxisIsOppositeToVelocity(axis) || playerRigidbody.velocity.x < velocityThatIsConsideredStrong)
+            playerRigidbody.AddForce(Vector2.right * axis * moveForceGrapple);
     }
 
     #region Obstacle Detection

@@ -874,9 +874,10 @@ MonoBehaviour:
   delayBetweenGrabs: 0.1
   pullDistanceJoint: 1
   maxRopeLength: 1
-  propulsionSpeed: 50
+  propulsionSpeed: 75
+  maximumPropulsionVelocity: 12
   grappleDirectionIndicatorRadius: 1
-  actualAngleTest: 0
+  finishPropulsionForce: 5
 --- !u!114 &241914912
 MonoBehaviour:
   m_ObjectHideFlags: 0

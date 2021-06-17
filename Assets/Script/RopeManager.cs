@@ -61,10 +61,12 @@ public class RopeManager : MonoBehaviour
     bool invertYAxis = false;
 
     public float maxRopeLength;
-    public float propulsionSpeed;
+    public float propulsionSpeed = 1f;
+    public float maximumPropulsionVelocity = 10f;
     public float grappleDirectionIndicatorRadius = 1f;
+    [SerializeField]
+    float finishPropulsionForce = 10f;
 
-    public float actualAngleTest;
     public enum RopeState
     {
         Rest,
@@ -168,8 +170,6 @@ public class RopeManager : MonoBehaviour
         ShowGrapplePoint();
 
         ShowGrappleDirectionIndicator();
-
-        actualAngleTest = GetGrappleAngle();
 
         if (Input.GetKeyDown(KeyCode.P))
             invertYAxis = !invertYAxis;
@@ -391,6 +391,19 @@ public class RopeManager : MonoBehaviour
 
             if (playerRigidbody.velocity.magnitude > PlayerMotor.instance.velocityThatIsConsideredStrong)
                 PlayerMotor.instance.playerAnimator.Play("RollJump");
+
+            #region Final Burst Of Force before removing grapple
+            if (playerRigidbody.velocity.magnitude < maximumPropulsionVelocity)
+            {
+                Vector2 forceDirection = playerInput.actions.FindAction("Move").ReadValue<Vector2>();
+                if (playerInput.actions.FindAction("Move").phase != InputActionPhase.Started)
+                    forceDirection = ((Vector2)endPos.position - (Vector2)playerRigidbody.transform.position).normalized;
+
+                playerRigidbody.AddForce(forceDirection.normalized * finishPropulsionForce, ForceMode2D.Impulse);
+            }
+            #endregion
+
+            print("DISCONNECTED");
         }
     }
 
@@ -400,8 +413,8 @@ public class RopeManager : MonoBehaviour
 
         Vector2 forceToAdd = (distanceBetweenPlayerAndEndPos.normalized) * propulsionSpeed;
 
-
-        playerRigidbody.AddForce(forceToAdd);
+        if (playerRigidbody.velocity.magnitude < maximumPropulsionVelocity)
+            playerRigidbody.AddForce(forceToAdd);
         endPointJoint.distance = Mathf.Min(distanceBetweenPlayerAndEndPos.magnitude, endPointJoint.distance);
     }
 

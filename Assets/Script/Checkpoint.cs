@@ -23,6 +23,6 @@ public class Checkpoint : MonoBehaviour
         PauseManager.instance.SavePosition();
         CustomFunctions.PlaySound(CustomFunctions.instance.allCollectibleTiles[1].collectibleGetSound);
         GetComponent<SpriteRenderer>().color = Color.blue;
-        PlayerHealth.instance.GetComponent<IDamageable>().Heal(1);
+        PlayerHealth.instance.GetComponent<IDamageable>().Heal(2);
     }
 }

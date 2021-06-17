@@ -70,7 +70,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
             return;
 
         healthPoints += healAmount;
-        healthPoints = Mathf.Clamp(healthPoints, 0, 99);
+        healthPoints = Mathf.Clamp(healthPoints, 0, 3);
         CustomFunctions.HitFreeze(0.2f);
         SetHealthPointsDisplay();
 
