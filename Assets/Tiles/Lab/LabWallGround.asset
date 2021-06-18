@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 183505898b02fd741b0d703d5e2f78fc, type: 3}
   m_Name: LabWallGround
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -2811093026683915329, guid: 393d371c1d93fa64c990a23e7ac3be30,
+  m_DefaultSprite: {fileID: -3815089548793623573, guid: 393d371c1d93fa64c990a23e7ac3be30,
     type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 2
@@ -44,12 +44,11 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 2
     m_RandomTransform: 0
-    m_Neighbors: 01000000020000000200000001000000
+    m_Neighbors: 010000000200000002000000
     m_NeighborPositions:
     - {x: 1, y: 0, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
-    - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 2
     m_Sprites:
@@ -244,7 +243,7 @@ MonoBehaviour:
     - {x: 0, y: -1, z: 0}
     - {x: 1, y: -1, z: 0}
     m_RuleTransform: 0
-  - m_Id: 0
+  - m_Id: 13
     m_Sprites:
     - {fileID: -7982331513453685193, guid: 393d371c1d93fa64c990a23e7ac3be30, type: 3}
     m_GameObject: {fileID: 0}

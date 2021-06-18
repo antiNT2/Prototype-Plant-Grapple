@@ -1,82 +1,82 @@
 fileFormatVersion: 2
-guid: 393d371c1d93fa64c990a23e7ac3be30
+guid: acefddd57414d2d469c2af65b9f9718c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7655587865462500946
-    second: Ground Lab_0
+      213: 9189061304537882447
+    second: Slope Lab_0
   - first:
-      213: -1950545747869692765
-    second: Ground Lab_1
+      213: 3824815894005326115
+    second: Slope Lab_1
   - first:
-      213: -2811093026683915329
-    second: Ground Lab_2
+      213: -7102639103380535210
+    second: Slope Lab_2
   - first:
-      213: 3516937610803266037
-    second: Ground Lab_3
+      213: 5122343001870684309
+    second: Slope Lab_3
   - first:
-      213: 5832178263522256999
-    second: Ground Lab_4
+      213: 197552948137849000
+    second: Slope Lab_4
   - first:
-      213: 6126907389566903081
-    second: Ground Lab_5
+      213: -52425900932326647
+    second: Slope Lab_5
   - first:
-      213: 8778560344182175134
-    second: Ground Lab_6
+      213: -5005640128963391654
+    second: Slope Lab_6
   - first:
-      213: 2265049856207933624
-    second: Ground Lab_7
+      213: -3872493333900995962
+    second: Slope Lab_7
   - first:
-      213: 7500815121307877658
-    second: Ground Lab_8
+      213: 6199987620907362264
+    second: Slope Lab_8
   - first:
-      213: 6699510452232022206
-    second: Ground Lab_9
+      213: -8626774255465335206
+    second: Slope Lab_9
   - first:
-      213: -6455284933984002793
-    second: Ground Lab_10
+      213: 2591977019773630974
+    second: Slope Lab_10
   - first:
-      213: 494810094034692543
-    second: Ground Lab_11
+      213: -3371936503063320695
+    second: Slope Lab_11
   - first:
-      213: 2769236186394708221
-    second: Ground Lab_12
+      213: -7094938305792368321
+    second: Slope Lab_12
   - first:
-      213: -8299523390785708608
-    second: Ground Lab_13
+      213: 5520984868313828333
+    second: Slope Lab_13
   - first:
-      213: -3451173623708273040
-    second: Ground Lab_14
+      213: -1715089654725194480
+    second: Slope Lab_14
   - first:
-      213: -3815089548793623573
-    second: Ground Lab_15
+      213: 49560997395792065
+    second: Slope Lab_15
   - first:
-      213: 2113124046120234421
-    second: Ground Lab_16
+      213: 4232934610572859160
+    second: Slope Lab_16
   - first:
-      213: 8478855995816819635
-    second: Ground Lab_17
+      213: 3722581966561194396
+    second: Slope Lab_17
   - first:
-      213: 5064060739365951
-    second: Ground Lab_18
+      213: 5697401478386528581
+    second: Slope Lab_18
   - first:
-      213: 3510704320888356483
-    second: Ground Lab_19
+      213: -3206732018769518557
+    second: Slope Lab_19
   - first:
-      213: -8901099314609565019
-    second: Ground Lab_20
+      213: 1501969337415987735
+    second: Slope Lab_20
   - first:
-      213: -8559949275630331194
-    second: Ground Lab_21
+      213: -8986673541285849549
+    second: Slope Lab_21
   - first:
-      213: -7982331513453685193
-    second: Ground Lab_22
+      213: -4446280881348686415
+    second: Slope Lab_22
   - first:
-      213: 7514216833667154003
-    second: Ground Lab_23
+      213: -8952976964077917589
+    second: Slope Lab_23
   - first:
-      213: -8056422137181100080
-    second: Ground Lab_24
+      213: 136040750716323313
+    second: Slope Lab_24
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -140,7 +140,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -152,7 +152,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 4096
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -164,7 +164,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
-    maxTextureSize: 4096
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -178,7 +178,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ground Lab_0
+      name: Slope Lab_0
       rect:
         serializedVersion: 2
         x: 64
@@ -190,20 +190,21 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -16, y: 16}
+      - - {x: 16, y: 16}
+        - {x: -16, y: -16}
         - {x: -16, y: -16}
         - {x: 16, y: -16}
         - {x: 16, y: 16}
       tessellationDetail: 0
       bones: []
-      spriteID: ea1115cb563e1c590800000000000000
-      internalID: -7655587865462500946
+      spriteID: f4f944c129a168f70800000000000000
+      internalID: 9189061304537882447
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_1
+      name: Slope Lab_1
       rect:
         serializedVersion: 2
         x: 96
@@ -214,21 +215,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3ac041c0af44ee4e0800000000000000
-      internalID: -1950545747869692765
+      spriteID: 321a4757ac9741530800000000000000
+      internalID: 3824815894005326115
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_2
+      name: Slope Lab_2
       rect:
         serializedVersion: 2
         x: 128
@@ -243,17 +240,44 @@ TextureImporter:
       - - {x: -16, y: 16}
         - {x: -16, y: -16}
         - {x: 16, y: -16}
-        - {x: 16, y: 16}
+        - {x: 16, y: -16}
+        - {x: -16, y: 16}
       tessellationDetail: 0
       bones: []
-      spriteID: fb37de939cdfcf8d0800000000000000
-      internalID: -2811093026683915329
+      spriteID: 658443bed5b5e6d90800000000000000
+      internalID: -7102639103380535210
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_4
+      name: Slope Lab_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 16, y: 16}
+        - {x: -16, y: -16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 590d53422d7361740800000000000000
+      internalID: 5122343001870684309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slope Lab_4
       rect:
         serializedVersion: 2
         x: 64
@@ -264,21 +288,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 768affffa3f00f050800000000000000
-      internalID: 5832178263522256999
+      spriteID: 8a076121c59ddb200800000000000000
+      internalID: 197552948137849000
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_5
+      name: Slope Lab_5
       rect:
         serializedVersion: 2
         x: 96
@@ -289,21 +309,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 923e9de1fc5270550800000000000000
-      internalID: 6126907389566903081
+      spriteID: 90b16edbbeeb54ff0800000000000000
+      internalID: -52425900932326647
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_6
+      name: Slope Lab_6
       rect:
         serializedVersion: 2
         x: 128
@@ -314,21 +330,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e953f4a4f16b3d970800000000000000
-      internalID: 8778560344182175134
+      spriteID: a5f42bfd2d4688ab0800000000000000
+      internalID: -5005640128963391654
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_7
+      name: Slope Lab_7
       rect:
         serializedVersion: 2
         x: 160
@@ -343,17 +355,39 @@ TextureImporter:
       - - {x: -16, y: 16}
         - {x: -16, y: -16}
         - {x: 16, y: -16}
-        - {x: 16, y: 16}
+        - {x: 16, y: -16}
+        - {x: -16, y: 16}
       tessellationDetail: 0
       bones: []
-      spriteID: 8b0d2dde7d21f6f10800000000000000
-      internalID: 2265049856207933624
+      spriteID: 68253c584d3224ac0800000000000000
+      internalID: -3872493333900995962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_9
+      name: Slope Lab_8
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d7a00c64e7ca0650800000000000000
+      internalID: 6199987620907362264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slope Lab_9
       rect:
         serializedVersion: 2
         x: 32
@@ -364,21 +398,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eb86e42c24179fc50800000000000000
-      internalID: 6699510452232022206
+      spriteID: a56f081758a874880800000000000000
+      internalID: -8626774255465335206
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_10
+      name: Slope Lab_10
       rect:
         serializedVersion: 2
         x: 64
@@ -389,21 +419,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 71dd3f9dd883a66a0800000000000000
-      internalID: -6455284933984002793
+      spriteID: ef93599dd5d88f320800000000000000
+      internalID: 2591977019773630974
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_11
+      name: Slope Lab_11
       rect:
         serializedVersion: 2
         x: 96
@@ -414,21 +440,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fb9273ea82bedd600800000000000000
-      internalID: 494810094034692543
+      spriteID: 987ecb1ad997431d0800000000000000
+      internalID: -3371936503063320695
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_12
+      name: Slope Lab_12
       rect:
         serializedVersion: 2
         x: 128
@@ -439,21 +461,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df8c635b3ad4e6620800000000000000
-      internalID: 2769236186394708221
+      spriteID: f312fe39337b98d90800000000000000
+      internalID: -7094938305792368321
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_13
+      name: Slope Lab_13
       rect:
         serializedVersion: 2
         x: 160
@@ -464,21 +482,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0cd1c27e27b22dc80800000000000000
-      internalID: -8299523390785708608
+      spriteID: deb072e7c7a7e9c40800000000000000
+      internalID: 5520984868313828333
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_14
+      name: Slope Lab_14
       rect:
         serializedVersion: 2
         x: 224
@@ -489,21 +503,43 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 076bba4dfd7fa10d0800000000000000
-      internalID: -3451173623708273040
+      spriteID: 01d4824cb07c238e0800000000000000
+      internalID: -1715089654725194480
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_16
+      name: Slope Lab_15
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 16}
+        - {x: -16, y: 16}
+        - {x: 16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c08d7ce67310b000800000000000000
+      internalID: 49560997395792065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slope Lab_16
       rect:
         serializedVersion: 2
         x: 64
@@ -514,96 +550,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5bd2557cf13535d10800000000000000
-      internalID: 2113124046120234421
+      spriteID: 817d6ace9976eba30800000000000000
+      internalID: 4232934610572859160
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_3
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5f1c32d9f1caec030800000000000000
-      internalID: 3516937610803266037
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ground Lab_8
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
-      tessellationDetail: 0
-      bones: []
-      spriteID: a114f6f9c9f381860800000000000000
-      internalID: 7500815121307877658
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ground Lab_15
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
-      tessellationDetail: 0
-      bones: []
-      spriteID: bebc9d1c4441e0bc0800000000000000
-      internalID: -3815089548793623573
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ground Lab_17
+      name: Slope Lab_17
       rect:
         serializedVersion: 2
         x: 96
@@ -614,21 +571,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3bb3a54fa92faa570800000000000000
-      internalID: 8478855995816819635
+      spriteID: c91b724539449a330800000000000000
+      internalID: 3722581966561194396
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_18
+      name: Slope Lab_18
       rect:
         serializedVersion: 2
         x: 128
@@ -639,21 +592,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f3cad758cbdf11000800000000000000
-      internalID: 5064060739365951
+      spriteID: 541b30e557c311f40800000000000000
+      internalID: 5697401478386528581
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_19
+      name: Slope Lab_19
       rect:
         serializedVersion: 2
         x: 160
@@ -667,18 +616,19 @@ TextureImporter:
       physicsShape:
       - - {x: -16, y: 16}
         - {x: -16, y: -16}
-        - {x: 16, y: -16}
+        - {x: -16, y: -16}
+        - {x: 16, y: 16}
         - {x: 16, y: 16}
       tessellationDetail: 0
       bones: []
-      spriteID: 38ebaf5baf688b030800000000000000
-      internalID: 3510704320888356483
+      spriteID: 3202f5b08366f73d0800000000000000
+      internalID: -3206732018769518557
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_20
+      name: Slope Lab_20
       rect:
         serializedVersion: 2
         x: 224
@@ -689,21 +639,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a2593a5551f87480800000000000000
-      internalID: -8901099314609565019
+      spriteID: 7127534972118d410800000000000000
+      internalID: 1501969337415987735
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_21
+      name: Slope Lab_21
       rect:
         serializedVersion: 2
         x: 64
@@ -716,19 +662,20 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -16, y: 16}
-        - {x: -16, y: -16}
+        - {x: -16, y: 16}
+        - {x: 16, y: -16}
         - {x: 16, y: -16}
         - {x: 16, y: 16}
       tessellationDetail: 0
       bones: []
-      spriteID: 6ca11b28c73f43980800000000000000
-      internalID: -8559949275630331194
+      spriteID: 3365143170ce84380800000000000000
+      internalID: -8986673541285849549
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_22
+      name: Slope Lab_22
       rect:
         serializedVersion: 2
         x: 96
@@ -739,21 +686,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 736df2dd7cf093190800000000000000
-      internalID: -7982331513453685193
+      spriteID: 1bdc9978813ab42c0800000000000000
+      internalID: -4446280881348686415
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_23
+      name: Slope Lab_23
       rect:
         serializedVersion: 2
         x: 128
@@ -767,18 +710,19 @@ TextureImporter:
       physicsShape:
       - - {x: -16, y: 16}
         - {x: -16, y: -16}
-        - {x: 16, y: -16}
+        - {x: -16, y: -16}
+        - {x: 16, y: 16}
         - {x: 16, y: 16}
       tessellationDetail: 0
       bones: []
-      spriteID: 350cdffe56cd74860800000000000000
-      internalID: 7514216833667154003
+      spriteID: b6a61e5d2e2a0c380800000000000000
+      internalID: -8952976964077917589
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Lab_24
+      name: Slope Lab_24
       rect:
         serializedVersion: 2
         x: 224
@@ -789,15 +733,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -16, y: 16}
-        - {x: -16, y: -16}
-        - {x: 16, y: -16}
-        - {x: 16, y: 16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0d72ab040c6d13090800000000000000
-      internalID: -8056422137181100080
+      spriteID: 1f58c6d875053e100800000000000000
+      internalID: 136040750716323313
       vertices: []
       indices: 
       edges: []
