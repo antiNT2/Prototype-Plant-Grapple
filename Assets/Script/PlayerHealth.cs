@@ -2,6 +2,8 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -56,6 +58,12 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         healthPointsParentDisplay.localPosition = Vector2.zero;
 
         StartCoroutine(DamageRoutine());
+        ChromaticAberration chromaticAberration;
+        FindObjectOfType<Volume>().profile.TryGet(out chromaticAberration);
+
+        chromaticAberration.intensity.value = 1;
+        DOTween.To(() => chromaticAberration.intensity.value, x => chromaticAberration.intensity.value = x, 0f, 1f);
+
         if (healthPoints <= 0)
         {
             CustomFunctions.SpawnDeathExplosion(this.transform.position);

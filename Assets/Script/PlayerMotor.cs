@@ -185,13 +185,20 @@ public class PlayerMotor : MonoBehaviour
     #region Knockback
     public void SetKnockback(float knockbackForce, bool oppositeToPlayerDirection = false)
     {
-        knockbackAxis = knockbackForce;
+        float output = knockbackForce;
 
         if (oppositeToPlayerDirection)
         {
             if ((isLookingRight && knockbackForce > 0) || (!isLookingRight && knockbackForce < 0))
-                knockbackAxis *= -1f;
+                output *= -1f;
         }
+
+        SetKnockback(output);
+    }
+
+    public void SetKnockback(float knockbackForce)
+    {
+        knockbackAxis = knockbackForce;
 
         StopCoroutine("ReduceKnockbackRoutine");
         StartCoroutine(ReduceKnockbackRoutine());
@@ -312,8 +319,8 @@ public class PlayerMotor : MonoBehaviour
 
     void GrappleMove(float axis)
     {
-       // if (AxisIsOppositeToVelocity(axis) || playerRigidbody.velocity.x < velocityThatIsConsideredStrong)
-            playerRigidbody.AddForce(Vector2.right * axis * moveForceGrapple);
+        // if (AxisIsOppositeToVelocity(axis) || playerRigidbody.velocity.x < velocityThatIsConsideredStrong)
+        playerRigidbody.AddForce(Vector2.right * axis * moveForceGrapple);
     }
 
     #region Obstacle Detection

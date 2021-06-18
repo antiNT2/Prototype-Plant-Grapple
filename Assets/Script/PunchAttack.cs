@@ -122,7 +122,7 @@ public class PunchAttack : MonoBehaviour
     #region Punch Mechanic
     void StartPunch()
     {
-        CustomFunctions.PlaySound(punchSound);
+        CustomFunctions.PlaySound(punchSound);      
 
         if (fadeOutCoroutine != null)
             CustomFunctions.instance.StopCoroutine(fadeOutCoroutine);
@@ -155,6 +155,7 @@ public class PunchAttack : MonoBehaviour
         if (hasHitEnemy)
         {
             //CustomFunctions.CameraShake();
+            PlayerMotor.instance.SetKnockback(1f * -Mathf.Sign(RopeManager.instance.GetGrappleDirection().x));
         }
 
 
@@ -316,6 +317,7 @@ public class PunchAttack : MonoBehaviour
 
         CustomFunctions.CameraShake();
         CustomFunctions.PlaySound(punchImpactSound);
+        PlayerMotor.instance.SetKnockback(1f * -Mathf.Sign(RopeManager.instance.GetGrappleDirection().x));
         isAllowedToTravelAgain = false;
     }
 }
