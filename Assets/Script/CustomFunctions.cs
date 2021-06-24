@@ -7,6 +7,7 @@ using Cinemachine;
 using UnityEngine.EventSystems;
 using System;
 using DG.Tweening;
+using TMPro;
 
 public class CustomFunctions : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class CustomFunctions : MonoBehaviour
     public GameObject droppedCoinPrefab;
     [SerializeField]
     Transform playerCameraFollowPoint;
+    public GameObject damageNumberDisplayPrefab;
 
     private void Awake()
     {
@@ -45,8 +47,8 @@ public class CustomFunctions : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-      /*  if (Input.GetKeyDown(KeyCode.Q))
-            HitCameraShake();*/
+        if (Input.GetKeyDown(KeyCode.Q))
+            DisplayDamageAmount("1", PlayerMotor.instance.transform.position);
     }
     public static void CameraShake()
     {
@@ -105,6 +107,18 @@ public class CustomFunctions : MonoBehaviour
             instance.StopCoroutine("VibrationRoutine");
             instance.StartCoroutine(instance.VibrationRoutine(lowFrequency, highFrequency));
         }
+    }
+
+    public static void DisplayDamageAmount(string damageAmountText, Vector2 position)
+    {
+        GameObject disp = Instantiate(instance.damageNumberDisplayPrefab);
+        disp.GetComponentInChildren<TextMeshProUGUI>().text = damageAmountText;
+        disp.transform.position = position;
+        disp.transform.DOMoveY(position.y + 0.75f, 0.5f).SetEase(Ease.OutCubic);
+        disp.transform.DOPunchScale(Vector3.one, 0.25f);
+        disp.GetComponentInChildren<TextMeshProUGUI>().DOColor(Color.clear, 0.2f).SetDelay(0.4f);
+
+        Destroy(disp.gameObject, 0.75f);
     }
 
     public static Coroutine FadeOut(SpriteRenderer renderer, float duration)

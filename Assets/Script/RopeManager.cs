@@ -402,8 +402,6 @@ public class RopeManager : MonoBehaviour
                 playerRigidbody.AddForce(forceDirection.normalized * finishPropulsionForce, ForceMode2D.Impulse);
             }
             #endregion
-
-            print("DISCONNECTED");
         }
     }
 

@@ -1103,6 +1103,8 @@ MonoBehaviour:
   droppedCoinPrefab: {fileID: 3399770166349781954, guid: 4411672ebc0b7554ba068c00c3baa2dc,
     type: 3}
   playerCameraFollowPoint: {fileID: 1977257587}
+  damageNumberDisplayPrefab: {fileID: 4184258433044395392, guid: 0c740b75cd7f66646a8ab3cfca9ae3b0,
+    type: 3}
 --- !u!114 &413962283
 MonoBehaviour:
   m_ObjectHideFlags: 0

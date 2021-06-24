@@ -31,7 +31,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         StartCoroutine(DamageRoutine());
         CustomFunctions.PlaySound(CustomFunctions.instance.hitEnemySound, 0.5f, true);
-        health--;
+        health -= damageAmount;
+        CustomFunctions.DisplayDamageAmount("-" + damageAmount.ToString(), this.transform.position);
 
         if (health <= 0)
             Die();
